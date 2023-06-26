@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/MainGameFolder/Scene/TitleScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/MainGameFolder/Scene/WeponSellectScene.unity
+    guid: 17a4d87f438164bcb88d6d9bc53a1710
+  - enabled: 1
+    path: Assets/MainGameFolder/Scene/DiceBoadScene.unity
+    guid: 348a01de24d8e4cb5ae3da83c5dafd2c
+  - enabled: 1
+    path: Assets/MainGameFolder/Scene/BattleScene.unity
+    guid: c78d24214081149b29a656caf115426a
+  - enabled: 1
+    path: Assets/MainGameFolder/Scene/ResultScene.unity
+    guid: 55f4739d94f3f4273a9bee57b5b5bbac
+  - enabled: 1
+    path: Assets/MainGameFolder/Scene/OperationSettingScene.unity
+    guid: e1230f6c97b004735a3485a6ba8a2e29
+  m_configObjects: {}
