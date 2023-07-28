@@ -43,6 +43,7 @@ public class BattleManagement : MonoBehaviour
         _enemy = Instantiate(Enemy[(int)enemySellect.GetLevel()], EnemySpawnPoint.transform.position, EnemySpawnPoint.transform.rotation);
         player = _player.GetComponent<PlayerStatus>();
         enemy = _enemy.GetComponent<EnemyStates>();
+        uiManager.SetStatus(player);
         if (weponSellect.wepon != WeponSellect.Wepon.Bow) reroadUI.SetActive(false);
         allDamage = 0;
         startTime = Time.time;
@@ -88,7 +89,7 @@ public class BattleManagement : MonoBehaviour
     {
         uiManager.TimeTextUI(nowTime);
         uiManager.PlayerHPUI((float)player.GetNowHP() / AllStatus.GetWeponHP(), (float)player.GetLateHP() / AllStatus.GetWeponHP());
-        uiManager.MoveUI(player.flont, player.back, player.left, player.right);
+        uiManager.MoveUI();
     }
 
     void ResetNavMesh()

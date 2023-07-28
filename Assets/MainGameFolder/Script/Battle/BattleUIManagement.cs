@@ -9,15 +9,18 @@ public class BattleUIManagement : MonoBehaviour
     [SerializeField] Slider PlayerNowHP;
     [SerializeField] Image PlayerLateHP;
     [SerializeField] GameObject damageUI;
-    [NamedArray(new string[] {"Flont", "Back", "Left", "Right"}), SerializeField]
-    Image[] MoveKeyUI = new Image[4];
-    [NamedArray(new string[] { "Flont", "Back", "Left", "Right" }), SerializeField]
-    TextMeshProUGUI[] MoveKeyText = new TextMeshProUGUI[4];
+    [NamedArray(new string[] { "Flont", "Back", "Left", "Right", "Sprint" }), SerializeField]
+    Image[] KeyUI;
+    [NamedArray(new string[] { "Flont", "Back", "Left", "Right", "Sprint" }), SerializeField]
+    TextMeshProUGUI[] KeyText;
 
+    private PlayerStatus _player;
     private float LatePlayerHPPersent;
     private float DamagePlayerHPPersent;
     private float StartTime;
     private float nowTime;
+
+    public void SetStatus(PlayerStatus player) { _player = player; }
 
     public void DamageUI(Collider col, int damage)
     {
@@ -44,20 +47,18 @@ public class BattleUIManagement : MonoBehaviour
         PlayerLateHP.fillAmount = DamagePlayerHPPersent;
     }
 
-    public void MoveUI(bool flont, bool back, bool left, bool right)
+    public void MoveUI()
     {
-        if (flont) MoveKeyUI[0].color = Color.red;
-        else MoveKeyUI[0].color = Color.black;
-        if (back) MoveKeyUI[1].color = Color.red;
-        else MoveKeyUI[1].color = Color.black;
-        if (left) MoveKeyUI[2].color = Color.red;
-        else MoveKeyUI[2].color = Color.black;
-        if (right) MoveKeyUI[3].color = Color.red;
-        else MoveKeyUI[3].color = Color.black;
+        if (_player.flont) KeyUI[0].color = Color.red; else KeyUI[0].color = Color.black;
+        if (_player.back)  KeyUI[1].color = Color.red; else KeyUI[1].color = Color.black;
+        if (_player.left)  KeyUI[2].color = Color.red; else KeyUI[2].color = Color.black;
+        if (_player.right) KeyUI[3].color = Color.red; else KeyUI[3].color = Color.black;
+        if (_player.run)   KeyUI[4].color = Color.red; else KeyUI[4].color = Color.black;
 
-        MoveKeyText[0].text = Controller.Flont.ToString();
-        MoveKeyText[1].text = Controller.Back.ToString();
-        MoveKeyText[2].text = Controller.Left.ToString();
-        MoveKeyText[3].text = Controller.Right.ToString();
+        KeyText[0].text = Controller.Flont.ToString();
+        KeyText[1].text = Controller.Back.ToString();
+        KeyText[2].text = Controller.Left.ToString();
+        KeyText[3].text = Controller.Right.ToString();
+        KeyText[4].text = Controller.Run.ToString();
     }
 }
