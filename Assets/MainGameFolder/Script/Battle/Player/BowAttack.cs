@@ -70,7 +70,7 @@ public class BowAttack : MonoBehaviour
     void Attack()
     {
         isShoot = isCharge & !status.attack;
-        isCharge = resetShot <= 0 & status.attack;
+        isCharge = resetShot >= shotInterval & status.attack;
         if (isCharge) Charge();
         if (isShoot)
         {
@@ -90,51 +90,81 @@ public class BowAttack : MonoBehaviour
         switch (type)
         {
             case BowType.Noumal:
-                int noumalRoop = 4;
-                while (noumalRoop > 0)
-                {
-                    Shoot(0);
-                    noumalRoop--;
-                }
+                NoumalShoot();
                 break;
             case BowType.Penetrate:
-                Shoot(1); break;
+                PenetrationShoot();
+                break;
             case BowType.Diffusion:
-                int difRoop = 5;
-                while (difRoop > 0)
-                {
-                    Shoot(0);
-                    difRoop--;
-                }
+                DiffusionShoot();
                 break;
         }
     }
-    void Shoot(int num)
+    void NoumalShoot()
     {
-        if(seManager.BT_BowAttackSE[1] != null) seManager.BT_GameSESource.PlayOneShot(seManager.BT_BowAttackSE[1]);
+        int Roop = 4;
+        while (Roop > 0)
+        {
+            if (seManager.BT_BowAttackSE[1] != null) seManager.BT_GameSESource.PlayOneShot(seManager.BT_BowAttackSE[1]);
+            int _ADamage = (int)(baseDamage * magunification * chargeTime / nurfDamage);
+            GameObject _A = Instantiate(arrow, new Vector3(arrowPoint.position.x, arrowPoint.position.y, arrowPoint.position.z), arrowPoint.rotation * Quaternion.AngleAxis(Random.Range(-10.0f, 10.0f), Vector3.up));
+            Rigidbody arrowRB = _A.GetComponent<Rigidbody>();
+            _A.transform.forward = arrowPoint.forward;
+            arrowRB.AddForce(_A.transform.forward * chargeTime * arrowSpeedMagunification * 0.1f);
+            if (chargeTime == maxCharge) { _ADamage = (int)(_ADamage * 1.5); }
+            _A.GetComponent<ArrowHit>().SetDamage(_ADamage);
+            _A.GetComponent<ArrowHit>().SetCriticalRange(criticalRange);
+            _A.GetComponent<ArrowHit>().SetArrowType(0);
+            Destroy(_A, 20.0f);
+            Roop--;
+        }
+    }
+    void PenetrationShoot()
+    {
+        if (seManager.BT_BowAttackSE[1] != null) seManager.BT_GameSESource.PlayOneShot(seManager.BT_BowAttackSE[1]);
         int _ADamage = (int)(baseDamage * magunification * chargeTime / nurfDamage);
         GameObject _A = Instantiate(arrow, new Vector3(arrowPoint.position.x, arrowPoint.position.y, arrowPoint.position.z), arrowPoint.rotation);
         Rigidbody arrowRB = _A.GetComponent<Rigidbody>();
         _A.transform.forward = arrowPoint.forward;
         arrowRB.AddForce(_A.transform.forward * chargeTime * arrowSpeedMagunification * 0.1f);
-        if(chargeTime == maxCharge) { _ADamage = (int)(_ADamage * 1.5); }
+        if (chargeTime == maxCharge) { _ADamage = (int)(_ADamage * 1.5); }
         _A.GetComponent<ArrowHit>().SetDamage(_ADamage);
         _A.GetComponent<ArrowHit>().SetCriticalRange(criticalRange);
-        _A.GetComponent<ArrowHit>().SetArrowType(num);
+        _A.GetComponent<ArrowHit>().SetArrowType(1);
         Destroy(_A, 20.0f);
+    }
+    void DiffusionShoot()
+    {
+        int Roop = 5;
+        while (Roop > 0)
+        {
+            if (seManager.BT_BowAttackSE[1] != null) seManager.BT_GameSESource.PlayOneShot(seManager.BT_BowAttackSE[1]);
+            int _ADamage = (int)(baseDamage * magunification * chargeTime / nurfDamage);
+            GameObject _A = Instantiate(arrow, new Vector3(arrowPoint.position.x, arrowPoint.position.y, arrowPoint.position.z), arrowPoint.rotation);
+            Rigidbody arrowRB = _A.GetComponent<Rigidbody>();
+            _A.transform.forward = arrowPoint.forward;
+            arrowRB.AddForce(_A.transform.forward * chargeTime * arrowSpeedMagunification * 0.1f);
+            if (chargeTime == maxCharge) { _ADamage = (int)(_ADamage * 1.5); }
+            _A.GetComponent<ArrowHit>().SetDamage(_ADamage);
+            _A.GetComponent<ArrowHit>().SetCriticalRange(criticalRange);
+            _A.GetComponent<ArrowHit>().SetArrowType(0);
+            Destroy(_A, 20.0f);
+            Roop--;
+        }
     }
     void Resetter()
     {
-        resetShot = shotInterval;
+        resetShot = 0;
         chargeTime = 0f;
     }
     void Interval()
     {
-        if (resetShot > 0)
+        if (resetShot < shotInterval)
         {
-            resetShot -= 0.1f * Time.deltaTime;
-            chargeUI.ReroadingUI(resetShot / shotInterval);
+            resetShot += 0.1f * Time.deltaTime;
         }
+        else resetShot = shotInterval;
+        chargeUI.ReroadingUI(resetShot / shotInterval);
     }
 
     public float MathCharge() { return chargeTime / maxCharge; }

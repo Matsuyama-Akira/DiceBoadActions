@@ -69,6 +69,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 871097653860951774, guid: 4aa41b26d621f435fb679e1413ed4c1d, type: 3}
+      propertyPath: type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 886228969141569292, guid: 4aa41b26d621f435fb679e1413ed4c1d, type: 3}
       propertyPath: status
       value: 
@@ -96,6 +100,10 @@ PrefabInstance:
     - target: {fileID: 886228969141569294, guid: 4aa41b26d621f435fb679e1413ed4c1d, type: 3}
       propertyPath: attackDamage
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 966829855938611271, guid: 4aa41b26d621f435fb679e1413ed4c1d, type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 982979823644005065, guid: 4aa41b26d621f435fb679e1413ed4c1d, type: 3}
       propertyPath: m_RootOrder
@@ -206,9 +214,6 @@ MonoBehaviour:
   arrowSpeedMagunification: 250
   shotInterval: 0.1
   maxCharge: 10
-  chargeSE: {fileID: 8300000, guid: 969f05c378b0242d09b4725b03244a52, type: 3}
-  shootSE: {fileID: 8300000, guid: d9419ba0bfac1e84a95418ac5851caf6, type: 3}
-  SESource: {fileID: 0}
 --- !u!114 &7763491762778379626 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 886228969141569294, guid: 4aa41b26d621f435fb679e1413ed4c1d, type: 3}

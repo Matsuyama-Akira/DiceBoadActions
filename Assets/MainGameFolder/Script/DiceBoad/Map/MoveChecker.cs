@@ -96,7 +96,7 @@ public class MoveChecker : MonoBehaviour
                         }
                         break;
                     case Status.Enemy1:
-                        if(_enemys == null)
+                        if(_enemys == null | _enemys.gameObject.name != "DB_Enemy1(Clone)")
                         {
                             ResetInstance();
                             _enemys = Instantiate(Enemys[0], transform.position, transform.rotation * instanceRotation);
@@ -105,7 +105,7 @@ public class MoveChecker : MonoBehaviour
                         }
                         break;
                     case Status.Enemy2:
-                        if (_enemys == null)
+                        if (_enemys == null | _enemys.gameObject.name != "DB_Enemy2(Clone)")
                         {
                             ResetInstance();
                             _enemys = Instantiate(Enemys[1], transform.position, transform.rotation * instanceRotation);
@@ -114,7 +114,7 @@ public class MoveChecker : MonoBehaviour
                         }
                         break;
                     case Status.Boss:
-                        if (_enemys == null)
+                        if (_enemys == null | _enemys.gameObject.name != "DB_Enemy_Boss(Clone)")
                         {
                             ResetInstance();
                             _enemys = Instantiate(Enemys[2], transform.position, transform.rotation * instanceRotation);
