@@ -13,6 +13,8 @@ public class NowKey : MonoBehaviour
     private TextMeshProUGUI[] KeyText;
     [SerializeField] ThisKey key;
 
+    private int stringSprint;
+
     private void Awake()
     {
         KeyText = GetComponentsInChildren<TextMeshProUGUI>();
@@ -54,6 +56,17 @@ public class NowKey : MonoBehaviour
                 break;
         }
         KeyText[0].text = key.ToString();
+        StringNewLine();
         gameObject.name = key.ToString();
+    }
+
+    private void StringNewLine()
+    {
+        if (KeyText[1].text.IndexOf("Right") != -1) stringSprint = 5;
+        else if (KeyText[1].text.IndexOf("Left") == -1) return;
+        else stringSprint = 4;
+
+        string backChar = KeyText[1].text.Substring(stringSprint);
+        KeyText[1].text = KeyText[1].text.Remove(stringSprint, backChar.Length) + "\n" + backChar;
     }
 }

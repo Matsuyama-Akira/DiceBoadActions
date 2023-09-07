@@ -43,6 +43,8 @@ public class PlayerCamera : MonoBehaviour
         velocity += frameVelocity;
         velocity.y = Mathf.Clamp(velocity.y, -90, 90);
 
+        Debug.LogError(Quaternion.AngleAxis(-velocity.y * Controller.SensiY, Vector3.right));
+
         // Rotate camera up-down and controller left-right from velocity.
         transform.localRotation = Quaternion.AngleAxis(-velocity.y * Controller.SensiY, Vector3.right);
         character.localRotation = Quaternion.AngleAxis(velocity.x * Controller.SensiX, Vector3.up);

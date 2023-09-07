@@ -6,6 +6,7 @@ public class WeponSellectManager : MonoBehaviour
 {
     private WeponSellect wepon;
     [SerializeField] TextMeshProUGUI weponText;
+    [SerializeField] Transform weponSpawnPoint;
     [SerializeField, NamedArray(new string[5] { "Sword", "Spire", "Bow", "Gun", "Magic" })]
     private GameObject[] WeponObject = new GameObject[5];
 
