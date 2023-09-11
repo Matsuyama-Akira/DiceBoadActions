@@ -8,7 +8,7 @@ public class PlayerCamera : MonoBehaviour
         Position, MoveRange,
     }
     [SerializeField] Transform character;
-    [SerializeField] CameraType type = CameraType.MoveRange;
+    [SerializeField] CameraType type = CameraType.Position;
     public float sensitivity = 2;
     public float smoothing = 1.5f;
 

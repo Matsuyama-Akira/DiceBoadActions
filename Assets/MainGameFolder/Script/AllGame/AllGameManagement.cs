@@ -31,6 +31,11 @@ namespace AllGameManager
             DontDestroyOnLoad(this);
             BGMPleyer = GetComponent<AllGameBGM>();
         }
+        private void Start()
+        {
+            Application.targetFrameRate = 30;
+            Debug.LogError("FrameRateReset!");
+        }
 
         void Update()
         {
