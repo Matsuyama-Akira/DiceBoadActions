@@ -7,7 +7,7 @@ namespace AllGameManager
         public enum Wepon
         {
             Sword   = 0,
-            Spire   = 1,
+            Spear   = 1,
             Bow     = 2,
             Gun     = 3,
             Magic   = 4,
@@ -28,7 +28,7 @@ namespace AllGameManager
             switch (weponSellect)
             {
                 case "Sword":       wepon = Wepon.Sword; break;
-                case "Spire":       wepon = Wepon.Spire; break;
+                case "Spire":       wepon = Wepon.Spear; break;
                 case "Bow":         wepon = Wepon.Bow;   break;
                 case "Gun":         wepon = Wepon.Gun;   break;
                 case "MagicWepon":  wepon = Wepon.Magic; break;

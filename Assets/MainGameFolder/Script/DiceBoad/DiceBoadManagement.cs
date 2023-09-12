@@ -494,7 +494,7 @@ public class DiceBoadManagement : MonoBehaviour
             switch (newWepons[0])
             {
                 case 0: wepon.wepon = WeponSellect.Wepon.Sword; break;
-                case 1: wepon.wepon = WeponSellect.Wepon.Spire; break;
+                case 1: wepon.wepon = WeponSellect.Wepon.Spear; break;
                 case 2: wepon.wepon = WeponSellect.Wepon.Bow;   break;
                 case 3: wepon.wepon = WeponSellect.Wepon.Gun;   break;
                 case 4: wepon.wepon = WeponSellect.Wepon.Magic; break;

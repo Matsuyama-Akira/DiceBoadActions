@@ -63,8 +63,8 @@ public class NowKey : MonoBehaviour
     private void StringNewLine()
     {
         if (KeyText[1].text.IndexOf("Right") != -1) stringSprint = 5;
-        else if (KeyText[1].text.IndexOf("Left") == -1) return;
-        else stringSprint = 4;
+        else if (KeyText[1].text.IndexOf("Left") != -1) stringSprint = 4;
+        else return;
 
         string backChar = KeyText[1].text.Substring(stringSprint);
         KeyText[1].text = KeyText[1].text.Remove(stringSprint, backChar.Length) + "\n" + backChar;

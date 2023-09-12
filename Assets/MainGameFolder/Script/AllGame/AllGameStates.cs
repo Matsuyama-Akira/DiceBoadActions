@@ -6,7 +6,7 @@ namespace AllGameManager
     {
         private WeponSellect wepon;
         [SerializeField, Range(150, 400)] private int startPlayerHP;
-        [NamedArray(new string[5] { "Sword", "Spire", "Bow", "Gun", "Magic" }), SerializeField, Range(150, 400)]
+        [NamedArray(new string[5] { "Sword", "Spear", "Bow", "Gun", "Magic" }), SerializeField, Range(150, 400)]
         private int[] weponStartPlayerHP = new int[5];
         private int playerHP;
 
