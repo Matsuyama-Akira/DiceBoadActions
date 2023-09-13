@@ -9,6 +9,7 @@ namespace AllGameManager
         [NamedArray(new string[5] { "Sword", "Spear", "Bow", "Gun", "Magic" }), SerializeField, Range(150, 400)]
         private int[] weponStartPlayerHP = new int[5];
         private int playerHP;
+        private int playerLateHP;
 
         //Result status
         private int enemyKillCount;
@@ -38,6 +39,7 @@ namespace AllGameManager
 
         public void ResetHP() { playerHP = weponStartPlayerHP[(int)wepon.wepon]; }
         public void AddPlayerHP(int nowHP) { playerHP = nowHP; }
+        public void AddPlayerLateHP() { playerLateHP = playerHP; }
         public void AddHealHP(int heal) { playerHP += heal; if (playerHP >= weponStartPlayerHP[(int)wepon.wepon]) playerHP = weponStartPlayerHP[(int)wepon.wepon]; }
         public void AddKillCount(int kill) { enemyKillCount += kill; }
         public void AddAllDamage(int damage) { AllDamage += damage; }
@@ -50,6 +52,7 @@ namespace AllGameManager
 
         public int GetWeponHP() { return weponStartPlayerHP[(int)wepon.wepon]; }
         public int GetPlayerHP() { return playerHP; }
+        public int GetLateHP() { return playerLateHP; }
         public int GetKillCount() { return enemyKillCount; }
         public int GetAllDamage() { return AllDamage; }
         public int GetPlayTurn() { return playTurn; }

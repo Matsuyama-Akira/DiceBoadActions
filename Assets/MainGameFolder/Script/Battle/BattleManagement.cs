@@ -62,6 +62,7 @@ public class BattleManagement : MonoBehaviour
         {
             manager.AddBattleResult(0);
             AllStatus.AddPlayerHP(player.GetNowHP());
+            AllStatus.AddPlayerLateHP();
             AllStatus.AddKillCount(1);
             AllStatus.AddAllDamage(allDamage);
             if (enemySellect.GetLevel() == EnemySellect.Level.Boss) sceneChenge.ChengeScene("ResultScene");
