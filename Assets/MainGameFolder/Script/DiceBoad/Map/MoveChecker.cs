@@ -73,54 +73,34 @@ public class MoveChecker : MonoBehaviour
 
             if (statusSwitch | itemLevelSwitch)
             {
+                ResetInstance();
                 switch (status)
                 {
                     case Status.Normal:
-                        ResetInstance();
                         break;
                     case Status.Items:
-                        if(_itemBox == null)
-                        {
-                            ResetInstance();
-                            _itemBox = Instantiate(ItemBox[(int)item], transform.position, transform.rotation * instanceRotation);
-                            _itemBox.transform.parent = this.transform;
-                            animator = _itemBox.GetComponent<Animator>();
-                        }
+                        _itemBox = Instantiate(ItemBox[(int)item], transform.position, transform.rotation * instanceRotation);
+                        _itemBox.transform.parent = this.transform;
+                        animator = _itemBox.GetComponent<Animator>();
                         break;
                     case Status.Heal:
-                        if (_healthKit == null)
-                        {
-                            ResetInstance();
-                            _healthKit = Instantiate(HealthKit, transform.position, transform.rotation * instanceRotation);
-                            _healthKit.transform.parent = this.transform;
-                        }
+                        _healthKit = Instantiate(HealthKit, transform.position, transform.rotation * instanceRotation);
+                        _healthKit.transform.parent = this.transform;
                         break;
                     case Status.Enemy1:
-                        if(_enemys == null | _enemys.gameObject.name != "DB_Enemy1(Clone)")
-                        {
-                            ResetInstance();
-                            _enemys = Instantiate(Enemys[0], transform.position, transform.rotation * instanceRotation);
-                            _enemys.transform.parent = this.transform;
-                            animator = _enemys.GetComponent<Animator>();
-                        }
+                        _enemys = Instantiate(Enemys[0], transform.position, transform.rotation * instanceRotation);
+                        _enemys.transform.parent = this.transform;
+                        animator = _enemys.GetComponent<Animator>();
                         break;
                     case Status.Enemy2:
-                        if (_enemys == null | _enemys.gameObject.name != "DB_Enemy2(Clone)")
-                        {
-                            ResetInstance();
-                            _enemys = Instantiate(Enemys[1], transform.position, transform.rotation * instanceRotation);
-                            _enemys.transform.parent = this.transform;
-                            animator = _enemys.GetComponent<Animator>();
-                        }
+                        _enemys = Instantiate(Enemys[1], transform.position, transform.rotation * instanceRotation);
+                        _enemys.transform.parent = this.transform;
+                        animator = _enemys.GetComponent<Animator>();
                         break;
                     case Status.Boss:
-                        if (_enemys == null | _enemys.gameObject.name != "DB_Enemy_Boss(Clone)")
-                        {
-                            ResetInstance();
-                            _enemys = Instantiate(Enemys[2], transform.position, transform.rotation * instanceRotation);
-                            _enemys.transform.parent = this.transform;
-                            animator = _enemys.GetComponent<Animator>();
-                        }
+                        _enemys = Instantiate(Enemys[2], transform.position, transform.rotation * instanceRotation);
+                        _enemys.transform.parent = this.transform;
+                        animator = _enemys.GetComponent<Animator>();
                         break;
                 }
             }

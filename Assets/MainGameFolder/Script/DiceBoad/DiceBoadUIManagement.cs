@@ -6,15 +6,17 @@ using UnityEngine.UI;
 public class DiceBoadUIManagement : MonoBehaviour
 {
     [SerializeField] GameObject PlayerTurnUI;
-    [SerializeField, NamedArray(new string[] { "Sword", "Bow" })] GameObject[] WeponImageObj;
-    [SerializeField, NamedArray(new string[] { "Sword", "Bow" })] Image[] WeponImage;
+    [SerializeField, NamedArray(new string[] { "Sword", "Bow" })] Image[] nowWeponImage;
+    [SerializeField] Image nowWeponRarelity;
+    [SerializeField, NamedArray(new string[] { "Sword", "Bow" })] Image[] newWeponImage;
+    [SerializeField] Image newWeponRarelity;
+    [SerializeField, NamedArray(new string[] { "Sword", "Bow" })] Image[] oldWeponImage;
+    [SerializeField] Image oldWeponRarelity;
     [SerializeField, NamedArray(new string[] { "Common", "Rare", "Unique" })] Color32[] WeponRarelity; //0 = Common 1 = Rare 2 = Unique
     [SerializeField] Slider PlayerNowHP;
     [SerializeField] Image PlayerLateHP;
     [SerializeField] TextMeshProUGUI MovePointText;
     [SerializeField] GameObject WeponSellectUI;
-    [SerializeField] TextMeshProUGUI NewWeponText;
-    [SerializeField] TextMeshProUGUI OldWeponText;
     [SerializeField] TextMeshProUGUI StandbyRollText;
     [SerializeField] AnimationCurve StandbyWaitTime;
 
@@ -62,30 +64,16 @@ public class DiceBoadUIManagement : MonoBehaviour
         switch (wepon.wepon)
         {
             case AllGameManager.WeponSellect.Wepon.Sword:
-                WeponImageObj[0].SetActive(true);
-                WeponImageObj[1].SetActive(false);
+                nowWeponImage[0].enabled = true;
+                nowWeponImage[1].enabled = false;
                 break;
             case AllGameManager.WeponSellect.Wepon.Bow:
-                WeponImageObj[0].SetActive(false);
-                WeponImageObj[1].SetActive(true);
+                nowWeponImage[0].enabled = false;
+                nowWeponImage[1].enabled = true;
                 break;
         }
 
-        switch (wepon.rarelity)
-        {
-            case AllGameManager.WeponSellect.Rarelity.Common:
-                WeponImage[0].color = WeponRarelity[0];
-                WeponImage[1].color = WeponRarelity[0];
-                break;
-            case AllGameManager.WeponSellect.Rarelity.Rare:
-                WeponImage[0].color = WeponRarelity[1];
-                WeponImage[1].color = WeponRarelity[1];
-                break;
-            case AllGameManager.WeponSellect.Rarelity.Unique:
-                WeponImage[0].color = WeponRarelity[2];
-                WeponImage[1].color = WeponRarelity[2];
-                break;
-        }
+        nowWeponRarelity.color = WeponRarelity[(int)wepon.rarelity];
     }
 
     void NowPlayerHPUI(float nowPlayerHPPersent, float _LatePlayerHPPersent)
@@ -116,37 +104,41 @@ public class DiceBoadUIManagement : MonoBehaviour
         if (_manager.GetIsWeponSellect())
         {
             WeponSellectUI.SetActive(true);
-            string weponName = WeponName(), rarelity = RarelityName();
-            NewWeponText.text = "New wepon\n" + weponName + " : " + rarelity;
-            OldWeponText.text = "Old wepon\n" + wepon.wepon.ToString() + " : " + wepon.rarelity.ToString();
+            NewWeponImage();
+            OldWeponImage();
         }
         else WeponSellectUI.SetActive(false);
     }
-
-    string WeponName()
+    void NewWeponImage()
     {
-        string Name;
         switch (_manager.GetNewWepons(0))
         {
-            case 0: Name = "Sword"; break;
-            case 1: Name = "Spire"; break;
-            case 2: Name = "Bow"; break;
-            case 3: Name = "Gun"; break;
-            case 4: Name = "Magic"; break;
-            default: Name = null; break;
+            case 0:
+                newWeponImage[0].enabled = true;
+                newWeponImage[1].enabled = false;
+                break;
+            case 2:
+                newWeponImage[0].enabled = false;
+                newWeponImage[1].enabled = true;
+                break;
         }
-        return Name;
+
+        newWeponRarelity.color = WeponRarelity[_manager.GetNewWepons(1)];
     }
-    string RarelityName()
+    void OldWeponImage()
     {
-        string Name;
-        switch (_manager.GetNewWepons(1))
+        switch (wepon.wepon)
         {
-            case 0: Name = "Common"; break;
-            case 1: Name = "Rare"; break;
-            case 2: Name = "Unique"; break;
-            default: Name = null; break;
+            case AllGameManager.WeponSellect.Wepon.Sword:
+                oldWeponImage[0].enabled = true;
+                oldWeponImage[1].enabled = false;
+                break;
+            case AllGameManager.WeponSellect.Wepon.Bow:
+                oldWeponImage[0].enabled = false;
+                oldWeponImage[1].enabled = true;
+                break;
         }
-        return Name;
+
+        oldWeponRarelity.color = WeponRarelity[(int)wepon.rarelity];
     }
 }
