@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class DiceBoadUIManagement : MonoBehaviour
 {
+    public enum OS { Windows, Mac, }
+
+    [SerializeField] OS nowOS;
     [SerializeField] GameObject PlayerTurnUI;
     [SerializeField, NamedArray(new string[] { "Sword", "Bow" })] Image[] nowWeponImage;
     [SerializeField] Image nowWeponRarelity;
@@ -64,12 +67,28 @@ public class DiceBoadUIManagement : MonoBehaviour
         switch (wepon.wepon)
         {
             case AllGameManager.WeponSellect.Wepon.Sword:
-                nowWeponImage[0].enabled = true;
-                nowWeponImage[1].enabled = false;
+                if(nowOS == OS.Windows)
+                {
+                    nowWeponImage[0].enabled = false;
+                    nowWeponImage[1].enabled = true;
+                }
+                else
+                {
+                    nowWeponImage[0].enabled = true;
+                    nowWeponImage[1].enabled = false;
+                }
                 break;
             case AllGameManager.WeponSellect.Wepon.Bow:
-                nowWeponImage[0].enabled = false;
-                nowWeponImage[1].enabled = true;
+                if(nowOS == OS.Windows)
+                {
+                    nowWeponImage[0].enabled = true;
+                    nowWeponImage[1].enabled = false;
+                }
+                else
+                {
+                    nowWeponImage[0].enabled = false;
+                    nowWeponImage[1].enabled = true;
+                }
                 break;
         }
 
@@ -114,12 +133,28 @@ public class DiceBoadUIManagement : MonoBehaviour
         switch (_manager.GetNewWepons(0))
         {
             case 0:
-                newWeponImage[0].enabled = true;
-                newWeponImage[1].enabled = false;
+                if(nowOS == OS.Windows)
+                {
+                    newWeponImage[0].enabled = false;
+                    newWeponImage[1].enabled = true;
+                }
+                else
+                {
+                    newWeponImage[0].enabled = true;
+                    newWeponImage[1].enabled = false;
+                }
                 break;
             case 2:
-                newWeponImage[0].enabled = false;
-                newWeponImage[1].enabled = true;
+                if(nowOS == OS.Windows)
+                {
+                    newWeponImage[0].enabled = true;
+                    newWeponImage[1].enabled = false;
+                }
+                else
+                {
+                    newWeponImage[0].enabled = false;
+                    newWeponImage[1].enabled = true;
+                }
                 break;
         }
 
@@ -130,12 +165,28 @@ public class DiceBoadUIManagement : MonoBehaviour
         switch (wepon.wepon)
         {
             case AllGameManager.WeponSellect.Wepon.Sword:
-                oldWeponImage[0].enabled = true;
-                oldWeponImage[1].enabled = false;
+                if(nowOS == OS.Windows)
+                {
+                    oldWeponImage[0].enabled = false;
+                    oldWeponImage[1].enabled = true;
+                }
+                else
+                {
+                    oldWeponImage[0].enabled = true;
+                    oldWeponImage[1].enabled = false;
+                }
                 break;
             case AllGameManager.WeponSellect.Wepon.Bow:
-                oldWeponImage[0].enabled = false;
-                oldWeponImage[1].enabled = true;
+                if(nowOS == OS.Windows)
+                {
+                    oldWeponImage[0].enabled = true;
+                    oldWeponImage[1].enabled = false;
+                }
+                else
+                {
+                    oldWeponImage[0].enabled = false;
+                    oldWeponImage[1].enabled = true;
+                }
                 break;
         }
 
