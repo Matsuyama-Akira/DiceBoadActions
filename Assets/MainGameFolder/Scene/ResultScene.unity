@@ -431,7 +431,7 @@ RectTransform:
   m_GameObject: {fileID: 661509758}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1361399856}
@@ -462,7 +462,7 @@ MonoBehaviour:
   isInteractable: 1
   buttonColorSettings:
     normalColor:
-      color: {r: 0, g: 0, b: 0, a: 1}
+      color: {r: 0.8392157, g: 0.6392157, b: 0, a: 1}
       duration: 0
       ease: 1
     disabledColor:
@@ -470,11 +470,11 @@ MonoBehaviour:
       duration: 0
       ease: 1
     onPointerEnterColor:
-      color: {r: 1, g: 0, b: 0, a: 1}
+      color: {r: 0.6792453, g: 0.5173691, b: 0, a: 1}
       duration: 0
       ease: 1
     onPointerDownColor:
-      color: {r: 0.41509432, g: 0, b: 0, a: 1}
+      color: {r: 0.33962262, g: 0.25868452, b: 0, a: 1}
       duration: 0
       ease: 1
   textColorSettings:
@@ -523,8 +523,8 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   rectTransform: {fileID: 661509759}
-  onPointerEnterScale: 2
-  onPointerDownScale: 2
+  onPointerEnterScale: 1.2
+  onPointerDownScale: 1.2
   duration: 0.1
   ease: 6
   now: 4
