@@ -34,7 +34,6 @@ namespace AllGameManager
         private void Start()
         {
             Application.targetFrameRate = 30;
-            Debug.LogError("FrameRateReset!");
         }
 
         void Update()
@@ -45,7 +44,6 @@ namespace AllGameManager
         {
             SceneChenge();
             BGMPleyer.ChengeBGM((int)nowScene);
-            Debug.LogError(Controller.AllSensitivity + " " + Controller.SensiX + " " + Controller.SensiY);
         }
         void SceneChenge()
         {

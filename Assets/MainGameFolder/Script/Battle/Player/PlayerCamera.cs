@@ -35,7 +35,6 @@ public class PlayerCamera : MonoBehaviour
     }
     void MoucePositionCamera()
     {
-        // Get smooth velocity.
         Vector2 mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
         mouseDeltaY = mouseDelta.y;
         Vector2 rawFrameVelocity = Vector2.Scale(mouseDelta, Vector2.one * Controller.AllSensitivity);
@@ -43,19 +42,14 @@ public class PlayerCamera : MonoBehaviour
         velocity += frameVelocity;
         velocity.y = Mathf.Clamp(velocity.y, -90, 90);
 
-        Debug.LogError(Quaternion.AngleAxis(-velocity.y * Controller.SensiY, Vector3.right));
-
-        // Rotate camera up-down and controller left-right from velocity.
         transform.localRotation = Quaternion.AngleAxis(-velocity.y * Controller.SensiY, Vector3.right);
         character.localRotation = Quaternion.AngleAxis(velocity.x * Controller.SensiX, Vector3.up);
     }
     void MouceMoveRangeCamera()
     {
-        // マウスの移動量を取得
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
-        // マウスの移動量に応じてカメラを回転させる
         rotationAmount = new Vector2(mouseX, -mouseY) * sensitivity;
         if (transform.rotation.x <= -90 | transform.rotation.x >= 90) rotationAmount.y = 0;
         transform.localRotation *= Quaternion.AngleAxis(rotationAmount.y, Vector3.right);

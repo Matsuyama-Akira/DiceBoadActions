@@ -1,4 +1,5 @@
 using UnityEngine;
+
 [RequireComponent(typeof(MeshFilter), typeof(MeshCollider), typeof(Rigidbody))]
 public class ComplementCollider : MonoBehaviour
 {

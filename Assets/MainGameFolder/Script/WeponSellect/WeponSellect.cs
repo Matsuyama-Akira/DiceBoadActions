@@ -24,7 +24,6 @@ namespace AllGameManager
 
         public void weponSellecting(string weponSellect)
         {
-            Debug.Log(weponSellect);
             switch (weponSellect)
             {
                 case "Sword":       wepon = Wepon.Sword; break;
