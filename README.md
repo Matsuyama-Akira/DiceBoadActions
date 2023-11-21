@@ -1,16 +1,16 @@
 # DiceBoadAction
 ### Version 1.11
 
-# 概要
+# ゲーム内容
 サイコロを振ってマスを進み、遭遇した敵を倒していく3Dアクションゲームとなります。  
 道中には、宝箱マス、回復マス、敵マスの三種類が存在し、そのマスに止まることが出来れば効果を受けられるようになっています。ただし、最後のマスに存在するボス敵マスのみ、そのマスを踏んだ時点でその敵と戦うようになっています。
 ## それぞれのマスの効果
 ### ***宝箱マス***
   - 宝箱マスは、武器の種類(剣と弓)とその武器のレベル(コモン、レア、ユニークの三段階)からランダムに抽選し、選ばれた武器と現在持っている武器の二つから選択することが出来ます。
 ### ***回復マス***
-  - 
+  - 回復マスは、敵マスで起きた戦闘によるダメージを全回復することが出来ます。
 ### ***敵マス***
-  - 
+  - 敵マスは、対応した敵と戦闘します。敵のレベルは3段階あり、レベル1は青、レベル2はブラウン、レベル3(ボス)はデビルの色になっています。それぞれのレベル毎に攻撃力と体力が調整されています。
 
 # 動作環境
 Unity 2021.3.16f1
@@ -50,7 +50,4 @@ Unity 2021.3.16f1
   - JustCreate様
   - UnityAssetStoreより、[Low Poly RPG Fantasy Weapons Lite](https://assetstore.unity.com/packages/3d/props/weapons/low-poly-rpg-fantasy-weapons-lite-226554)を使用しました。
 
-- 武器アイコン
-  - Hippo様
-  - UnityAssetStoreより、[Fantasy Inventory Icons Free](https://assetstore.unity.com/packages/2d/gui/icons/fantasy-inventory-icons-free-143805)を使用しました。
 
