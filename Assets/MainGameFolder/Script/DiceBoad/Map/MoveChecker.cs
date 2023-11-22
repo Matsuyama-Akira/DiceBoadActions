@@ -21,7 +21,7 @@ public class MoveChecker : MonoBehaviour
 
     [Space, Header("Status of model")]
     [SerializeField] GameObject HealthKit;
-    [SerializeField, NamedArray(new string[] { "Common", "Rare", "Unique", "Legend"})]
+    [SerializeField, NamedArray(new string[] { "Common", "Rare", "Unique", "Legend" })]
     GameObject[] ItemBox;
     [SerializeField, NamedArray(new string[] { "Enemy1", "Enemy2", "Boss" })]
     GameObject[] Enemys;
@@ -47,8 +47,11 @@ public class MoveChecker : MonoBehaviour
     [SerializeField] bool clear;
     [SerializeField] bool lateClear;
     [SerializeField] bool cleared;
-    [Header("Instance rotation")]
+    [Space, Header("Instance rotation")]
     [SerializeField] Quaternion instanceRotation;
+    [Header("Items transform")]
+    private Vector3 healPosition = new Vector3(0, 1, 0);
+    [SerializeField] Quaternion healRotation;
 
     private void Awake()
     {
@@ -84,7 +87,8 @@ public class MoveChecker : MonoBehaviour
                         animator = _itemBox.GetComponent<Animator>();
                         break;
                     case Status.Heal:
-                        _healthKit = Instantiate(HealthKit, transform.position, transform.rotation * instanceRotation);
+                        if(instanceRotation == new Quaternion(0, 0, 0, 0)) _healthKit = Instantiate(HealthKit, transform.position + healPosition, transform.rotation * healRotation);
+                        else _healthKit = Instantiate(HealthKit, transform.position + healPosition, transform.rotation * instanceRotation * healRotation);
                         _healthKit.transform.parent = this.transform;
                         break;
                     case Status.Enemy1:
