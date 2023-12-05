@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyCollider : MonoBehaviour
 {
-    [Range(0, 100)] [SerializeField] float partMagunification;
+    [Range(0, 100), SerializeField, Tooltip("部位毎のダメージ倍率")] float partMagunification;
     public EnemyStates states => parent;
     private EnemyStates parent;
 
