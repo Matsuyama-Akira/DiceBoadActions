@@ -3,14 +3,15 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
+    // 必須スクリプト
     [Header("Assets")]
     private AllGameStates status;
     [SerializeField] GroundChecker groundCheck;
-    [Space, Header("Status")]
-    [Range(1, 10), SerializeField] int attackDamage;
-    [SerializeField] bool canRun = true;
 
-    //Private status
+    // プレイヤーステータス
+    [Space, Header("Status")]
+    [Range(1, 10), SerializeField, Tooltip("攻撃力")] int attackDamage;
+    [SerializeField] bool canRun = true;
     private int nowHP;
     private int lateHP;
     private int stanPoint;
