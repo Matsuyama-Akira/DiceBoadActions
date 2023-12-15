@@ -47,7 +47,7 @@ public class ChargeMaterUI : MonoBehaviour
                 meterImage1.color = maxColor;
             }
 
-            if (!bow.isCharge)
+            if (!bow.isCharging)
             {
                 meterImage1.color = baseColor;
                 meterImage1.fillAmount = 0;

@@ -4,16 +4,23 @@ using AllGameManager;
 public class BowAttack : MonoBehaviour
 {
     //Private states.
-    public enum BowType { Noumal, Penetrate, Diffusion,}
+    /// <summary> 弓の攻撃パターン </summary>
+    public enum BowType { Noumal, Penetrate, Diffusion, }
+    /// <summary> 攻撃パターンの選択 </summary>
     public BowType type     { get; private set; }
+    /// <summary> 再度打てるようになるまでのゲージ。攻撃すると0になる </summary>
     public float resetShot  { get; private set; }
+    /// <summary> チャージし始めてからの経過時間 </summary>
     public float chargeTime { get; private set; }
+    /// <summary> 矢を放ったか </summary>
     public bool isShoot     { get; private set; }
-    public bool isCharge    { get; private set; }
-    private bool isCharging;
-    public bool isWepon     { get; set; } = true;
+    /// <summary> チャージしているか </summary>
+    public bool isCharging    { get; private set; }
+    /// <summary> 攻撃可能か </summary>
+    public bool isAttackable     { get; set; } = true;
 
     [Header("GetAsset")]
+    // 必須アセット
     public BowParamTable getParam;
     private WeponSellect sellect;
     private AllGameSEManager seManager;
@@ -24,14 +31,20 @@ public class BowAttack : MonoBehaviour
     [SerializeField] PlayerStatus status;
     [Space]
     [Header("States")]
-    [Range(1f, 1000f)][SerializeField] private float arrowSpeedMagunification;
-    [Range(0.1f, 10.0f)][SerializeField] private float shotInterval;
-    [Range(2.0f, 10.0f)][SerializeField] private float maxCharge;
-    private float nurfDamage = 5f;
+    [Range(1f, 1000f), SerializeField, Tooltip("放った矢の移動速度")] private float arrowSpeedMagunification;
+    [Range(0.1f, 10.0f), SerializeField, Tooltip("リチャージのインターバル")] private float shotInterval;
+    [Range(2.0f, 10.0f), SerializeField, Tooltip("チャージの最大値")] private float maxCharge;
+    [Range(0.01f, 5.00f), SerializeField, Tooltip("弱体化倍率")] private float nurfDamage = 0.2f;
+    /// <summary> 基本ダメージ </summary>
     private int baseDamage;
+    /// <summary> チャージ量による倍率 </summary>
     private float magunification;
+    /// <summary> クリティカル確率 </summary>
     private int criticalRange;
 
+    /// <summary>
+    /// 各種セットアップ
+    /// </summary>
     void Awake()
     {
         GameObject manager = GameObject.FindWithTag("GameManager");
@@ -42,6 +55,10 @@ public class BowAttack : MonoBehaviour
         chargeUI = Bmanager.GetComponent<ChargeMaterUI>();
         BowSetUP();
     }
+
+    /// <summary>
+    /// レアリティからパラメーターを取得
+    /// </summary>
     void BowSetUP()
     {
         baseDamage     = getParam.BowList[(int)sellect.rarelity].baseDamage;
@@ -49,6 +66,9 @@ public class BowAttack : MonoBehaviour
         criticalRange  = getParam.BowList[(int)sellect.rarelity].criticalRange;
         BowTypeSet();
     }
+    /// <summary>
+    /// レアリティから攻撃パターンを取得
+    /// </summary>
     void BowTypeSet()
     {
         switch (getParam.BowList[(int)sellect.rarelity].type)
@@ -61,32 +81,56 @@ public class BowAttack : MonoBehaviour
 
     void Update()
     {
-        if (isWepon)
+        // 攻撃可能であれば攻撃のための処理を行う
+        if (isAttackable)
         {
             Attack();
             Interval();
         }
+        // 攻撃不可の場合、ステータスのリセットだけ処理する
+        else ResetByNonAttack();
     }
+    /// <summary>
+    /// 攻撃処理
+    /// </summary>
     void Attack()
     {
-        isShoot = isCharge & !status.attack;
-        isCharge = resetShot >= shotInterval & status.attack;
-        if (isCharge) Charge();
+        // チャージ中に攻撃キーを離すと矢を放つ
+        isShoot = isCharging & !status.attack;
         if (isShoot)
         {
-            ShootType();
+            Shoot();
             Resetter();
         }
+
+        // 矢を放てる状態で攻撃キーを入力するとチャージを開始する
+        isCharging = resetShot >= shotInterval & status.attack;
+        if (isCharging) Charge();
     }
+    /// <summary>
+    /// チャージの処理
+    /// </summary>
     void Charge()
     {
+        // チャージ音を鳴らす
         if (chargeTime == 0f & seManager.BT_BowAttackSE[0] != null) seManager.BT_GameSESource.PlayOneShot(seManager.BT_BowAttackSE[0]);
+
+        // チャージがマックスになるまでチャージする
         chargeTime += maxCharge * Time.deltaTime;
-        if(chargeTime >= maxCharge) { chargeTime = maxCharge; }
+        if(chargeTime >= maxCharge) chargeTime = maxCharge;
+
+        // チャージ用のUIを起動する
         chargeUI.StartMeterRadial();
     }
-    void ShootType()
+    /// <summary>
+    /// 攻撃パターン毎に射撃方法を変える
+    /// </summary>
+    void Shoot()
     {
+        // 矢を放ったSEを鳴らす
+        if (seManager.BT_BowAttackSE[1] != null) seManager.BT_GameSESource.PlayOneShot(seManager.BT_BowAttackSE[1]);
+
+        // 攻撃パターン毎に矢の生成方法を変える
         switch (type)
         {
             case BowType.Noumal:
@@ -100,32 +144,46 @@ public class BowAttack : MonoBehaviour
                 break;
         }
     }
+    /// <summary>
+    /// 攻撃パターンが通常射撃の処理
+    /// </summary>
     void NoumalShoot()
     {
+        // 矢の生成を4回行う
         int Roop = 4;
         while (Roop > 0)
         {
-            if (seManager.BT_BowAttackSE[1] != null) seManager.BT_GameSESource.PlayOneShot(seManager.BT_BowAttackSE[1]);
-            int _ADamage = (int)(baseDamage * magunification * chargeTime / nurfDamage);
+            // ダメージ量の計算
+            int _ADamage = (int)(baseDamage * magunification * chargeTime * nurfDamage);
+
+            // 矢の生成
             GameObject _A = Instantiate(arrow, new Vector3(arrowPoint.position.x, arrowPoint.position.y, arrowPoint.position.z), arrowPoint.rotation * Quaternion.AngleAxis(Random.Range(-10.0f, 10.0f), Vector3.up));
             Rigidbody arrowRB = _A.GetComponent<Rigidbody>();
-            _A.transform.forward = arrowPoint.forward;
+
+            // チャージ量による処理
             arrowRB.AddForce(_A.transform.forward * chargeTime * arrowSpeedMagunification * 0.1f);
             if (chargeTime == maxCharge) { _ADamage = (int)(_ADamage * 1.5); }
+
+            // 矢のパラメーターをセット
             _A.GetComponent<ArrowHit>().SetDamage(_ADamage);
             _A.GetComponent<ArrowHit>().SetCriticalRange(criticalRange);
             _A.GetComponent<ArrowHit>().SetArrowType(0);
+
+            // 20秒後に消滅
             Destroy(_A, 20.0f);
+
+            // ループ回数を減少
             Roop--;
         }
     }
+    /// <summary>
+    /// 攻撃パターンが貫通射撃の場合
+    /// </summary>
     void PenetrationShoot()
     {
-        if (seManager.BT_BowAttackSE[1] != null) seManager.BT_GameSESource.PlayOneShot(seManager.BT_BowAttackSE[1]);
-        int _ADamage = (int)(baseDamage * magunification * chargeTime / nurfDamage);
+        int _ADamage = (int)(baseDamage * magunification * chargeTime * nurfDamage);
         GameObject _A = Instantiate(arrow, new Vector3(arrowPoint.position.x, arrowPoint.position.y, arrowPoint.position.z), arrowPoint.rotation);
         Rigidbody arrowRB = _A.GetComponent<Rigidbody>();
-        _A.transform.forward = arrowPoint.forward;
         arrowRB.AddForce(_A.transform.forward * chargeTime * arrowSpeedMagunification * 0.1f);
         if (chargeTime == maxCharge) { _ADamage = (int)(_ADamage * 1.5); }
         _A.GetComponent<ArrowHit>().SetDamage(_ADamage);
@@ -133,16 +191,19 @@ public class BowAttack : MonoBehaviour
         _A.GetComponent<ArrowHit>().SetArrowType(1);
         Destroy(_A, 20.0f);
     }
+    /// <summary>
+    /// 攻撃パターンが拡散射撃の場合
+    /// </summary>
     void DiffusionShoot()
     {
         int Roop = 5;
         while (Roop > 0)
         {
-            if (seManager.BT_BowAttackSE[1] != null) seManager.BT_GameSESource.PlayOneShot(seManager.BT_BowAttackSE[1]);
-            int _ADamage = (int)(baseDamage * magunification * chargeTime / nurfDamage);
-            GameObject _A = Instantiate(arrow, new Vector3(arrowPoint.position.x, arrowPoint.position.y, arrowPoint.position.z), arrowPoint.rotation);
+            int _ADamage = (int)(baseDamage * magunification * chargeTime * nurfDamage);
+            float addYRotation = 10 * (Roop - 1) - 20;
+            Quaternion addRotation = Quaternion.Euler(0f, addYRotation, 0f);
+            GameObject _A = Instantiate(arrow, new Vector3(arrowPoint.position.x, arrowPoint.position.y, arrowPoint.position.z), arrowPoint.rotation * addRotation);
             Rigidbody arrowRB = _A.GetComponent<Rigidbody>();
-            _A.transform.forward = arrowPoint.forward;
             arrowRB.AddForce(_A.transform.forward * chargeTime * arrowSpeedMagunification * 0.1f);
             if (chargeTime == maxCharge) { _ADamage = (int)(_ADamage * 1.5); }
             _A.GetComponent<ArrowHit>().SetDamage(_ADamage);
@@ -152,11 +213,17 @@ public class BowAttack : MonoBehaviour
             Roop--;
         }
     }
+    /// <summary>
+    /// 
+    /// </summary>
     void Resetter()
     {
         resetShot = 0;
         chargeTime = 0f;
     }
+    /// <summary>
+    /// 
+    /// </summary>
     void Interval()
     {
         if (resetShot < shotInterval)
@@ -167,5 +234,18 @@ public class BowAttack : MonoBehaviour
         chargeUI.ReroadingUI(resetShot / shotInterval);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    void ResetByNonAttack()
+    {
+        resetShot = shotInterval;
+        chargeTime = 0f;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public float MathCharge() { return chargeTime / maxCharge; }
 }
