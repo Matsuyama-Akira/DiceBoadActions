@@ -5,6 +5,7 @@ namespace AllGameManager
 {
     public class AllGameManagement : MonoBehaviour
     {
+        /// <summary> シーン名 </summary>
         public enum Scene
         {
             Title,
@@ -14,25 +15,35 @@ namespace AllGameManager
             Result,
             OperationSetting,
         }
+
+        /// <summary> リザルト </summary>
         public enum BattleResult
         {
             Win,
             Lose,
         }
 
+        /// <summary> 現在のシーン名 </summary>
         public Scene nowScene { get; private set; }
+        /// <summary> 前回のシーン名 </summary>
         public Scene previousScene { get; private set; }
+        /// <summary> 今回のリザルト </summary>
         public BattleResult result { get; private set; }
 
+        /// <summary> BGMデータ </summary>
         private AllGameBGM BGMPleyer;
 
         void Awake()
         {
+            // このオブジェクトを全てのシーンで引き継ぐ
             DontDestroyOnLoad(this);
+
+            // BGMの取得
             BGMPleyer = GetComponent<AllGameBGM>();
         }
         private void Start()
         {
+            // フレームレートを最大30に固定
             Application.targetFrameRate = 30;
         }
 
@@ -40,9 +51,16 @@ namespace AllGameManager
         {
             Management();
         }
+
+        /// <summary>
+        /// 制御の統括
+        /// </summary>
         void Management()
         {
+            // 現在のシーンを取得
             SceneChenge();
+
+            // BGMの変更と再生
             BGMPleyer.ChengeBGM((int)nowScene);
         }
         void SceneChenge()
@@ -58,6 +76,9 @@ namespace AllGameManager
             }
         }
 
+        /// <summary>
+        /// シーンが切り替わる前のシーン名の取得
+        /// </summary>
         public void PreviousSceneChenge()
         {
             switch (SceneManager.GetActiveScene().name)
@@ -70,6 +91,11 @@ namespace AllGameManager
                 case "OperationSettingScene": previousScene = Scene.OperationSetting; break;
             }
         }
+
+        /// <summary>
+        /// リザルトの切り替え
+        /// </summary>
+        /// <param name="_result"> 勝敗結果 0なら勝利 1なら敗北 </param>
         public void AddBattleResult(int _result)
         {
             switch (_result)

@@ -5,102 +5,95 @@ using TMPro;
 
 public class BattleUIManagement : MonoBehaviour
 {
-    // UIƒAƒZƒbƒg
-    /// <summary> Œo‰ßŠÔ </summary>
-    [SerializeField] TextMeshProUGUI timeText;
-    /// <summary> ƒvƒŒƒCƒ„[‚ÌŒ»İ‚ÌHP </summary>
-    [SerializeField] Slider PlayerNowHP;
-    /// <summary> ƒvƒŒƒCƒ„[‚Ì™X‚ÉŒ¸‚éHP•\Œ» </summary>
-    [SerializeField] Image PlayerLateHP;
-    /// <summary> “G‚Ìƒ_ƒ[ƒW•\‹L </summary>
-    [SerializeField] GameObject damageUI;
-    /// <summary> ƒL[“ü—Í‚Ì•\¦ </summary>
-    [NamedArray(new string[] { "Flont", "Back", "Left", "Right", "Sprint" }), SerializeField]
+    // UIã‚¢ã‚»ãƒƒãƒˆ
+    [SerializeField, Tooltip("çµŒéæ™‚é–“ã®ãƒ†ã‚­ã‚¹ãƒˆ")] TextMeshProUGUI timeText;
+    [SerializeField, Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®HPã®ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼")] Slider PlayerNowHP;
+    [SerializeField, Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹å‰ã®HPã®UI")] Image PlayerLateHP;
+    [SerializeField, Tooltip("æ•µãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸæ™‚ã®UI")] GameObject damageUI;
+    [NamedArray(new string[] { "Flont", "Back", "Left", "Right", "Sprint" }), SerializeField, Tooltip("ã‚­ãƒ¼å…¥åŠ›ã®UI")]
     Image[] KeyUI;
-    /// <summary> ƒL[‚Ì–¼‘O </summary>
-    [NamedArray(new string[] { "Flont", "Back", "Left", "Right", "Sprint" }), SerializeField]
+    [NamedArray(new string[] { "Flont", "Back", "Left", "Right", "Sprint" }), SerializeField, Tooltip("ã‚­ãƒ¼ã®åå‰")]
     TextMeshProUGUI[] KeyText;
 
-    // UI‚É•K—v‚Èƒf[ƒ^
-    /// <summary> ƒvƒŒƒCƒ„[‚ÌƒL[“ü—Í </summary>
+    // UIãƒ‡ãƒ¼ã‚¿
+    /// <summary> ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ </summary>
     private PlayerStatus _player;
-    /// <summary> ƒvƒŒƒCƒ„[‚Ìƒ_ƒ[ƒW‚ğó‚¯‚é‘O‚ÌHP‚Ìƒp[ƒZƒ“ƒg </summary>
+    /// <summary> ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹å‰ã®HPã®ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆ </summary>
     private float LatePlayerHPPersent;
-    /// <summary> ƒ_ƒ[ƒW‚ğó‚¯‚Ä‚©‚ç™X‚ÉŒ¸‚éHP‚Ìƒp[ƒZƒ“ƒg </summary>
+    /// <summary> ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸåˆ†å¾ã€…ã«æ¸›ã‚‰ã™HPã®ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆ </summary>
     private float DamagePlayerHPPersent;
-    /// <summary> ƒvƒŒƒCƒ„[‚ªƒ_ƒ[ƒW‚ğó‚¯‚½ƒ^ƒCƒ~ƒ“ƒO‚ğ0‚Æ‚µ‚½ŠÔ </summary>
+    /// <summary> ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸæ™‚é–“ </summary>
     private float StartTime;
-    /// <summary> ƒvƒŒƒCƒ„[‚ªƒ_ƒ[ƒW‚ğó‚¯‚Ä‚©‚çŒo‰ß‚µ‚½ŠÔ </summary>
+    /// <summary> ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã‹ã‚‰ã®çµŒéæ™‚é–“ </summary>
     private float nowTime;
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ÌƒXƒe[ƒ^ƒX‚ğƒLƒƒƒbƒVƒ…‚·‚é
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®ã‚»ãƒƒãƒˆ
     /// </summary>
-    /// <param name="player"> ƒvƒŒƒCƒ„[ƒXƒe[ƒ^ƒX </param>
+    /// <param name="player"> ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Xï¿½eï¿½[ï¿½^ï¿½X </param>
     public void SetStatus(PlayerStatus player) { _player = player; }
 
     /// <summary>
-    /// “G‚Ìƒ_ƒ[ƒW—Ê‚ğ•\¦‚·‚é
+    /// ãƒ€ãƒ¡ãƒ¼ã‚¸UIã®ç”Ÿæˆ
     /// </summary>
-    /// <param name="col"> ƒ_ƒ[ƒW‚ğó‚¯‚½êŠ </param>
-    /// <param name="damage"> ƒ_ƒ[ƒW—Ê </param>
+    /// <param name="col"> è¡çªã—ãŸã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®åœ°ç‚¹ </param>
+    /// <param name="damage"> ãƒ€ãƒ¡ãƒ¼ã‚¸é‡ </param>
     public void DamageUI(Collider col, int damage)
     {
-        // “G‚ªƒ_ƒ[ƒW‚ğó‚¯‚½êŠ‚Éƒ_ƒ[ƒW—Ê‚Ì•\‹LUI‚ğ¶¬
+        // è¡çªã—ãŸã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®åœ°ç‚¹ã«UIã‚’ç”Ÿæˆã™ã‚‹
         GameObject _damageUI = Instantiate(damageUI, col.bounds.center - Camera.main.transform.forward * 0.2f, Quaternion.identity);
 
-        // ¶¬‚µ‚½UI‚ÌƒeƒLƒXƒg‚ğƒ_ƒ[ƒW—Ê‚É•ÏX
+        // ãƒ€ãƒ¡ãƒ¼ã‚¸UIã®Textã‚’ãƒ€ãƒ¡ãƒ¼ã‚¸é‡ã«å¤‰ãˆã‚‹
         _damageUI.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
     }
 
     /// <summary>
-    /// Œ»İ‚ÌŒo‰ßŠÔ‚ğ•\¦
+    /// çµŒéæ™‚é–“ã®æ›´æ–°
     /// </summary>
-    /// <param name="time"> Œ»İ‚ÌŒo‰ßŠÔ </param>
     public void TimeTextUI(float time) { timeText.text = time.ToString(); }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ÌHP‚ÌUI
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPã®UIåˆ¶å¾¡
     /// </summary>
-    /// <param name="nowPlayerHPPersent"> Œ»İ‚ÌƒvƒŒƒCƒ„[‚ÌHP </param>
-    /// <param name="_LatePlayerHPPersent"> ƒvƒŒƒCƒ„[‚Ìƒ_ƒ[ƒW‚ğó‚¯‚é‘O‚ÌHP </param>
+    /// <param name="nowPlayerHPPersent"> ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®HP </param>
+    /// <param name="_LatePlayerHPPersent"> ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹å‰ã®HP </param>
     public void PlayerHPUI(float nowPlayerHPPersent, float _LatePlayerHPPersent)
     {
-        // ƒ_ƒ[ƒW‚ğó‚¯‚é‘O‚ÌHP‚ª•Ï‰»‚µ‚½‚©
+        // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹å‰ã®HPãŒå¤‰åŒ–ã—ãŸã‹
         if (LatePlayerHPPersent != _LatePlayerHPPersent)
         {
-            // ƒ_ƒ[ƒW‚ğó‚¯‚é‘O‚ÌHP‚ğXV
+            // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹å‰ã®HPã‚’æ›´æ–°
             LatePlayerHPPersent = _LatePlayerHPPersent;
 
-            // ƒ_ƒ[ƒW‚ğó‚¯‚é‘O‚ÌHP‚ğ‘ã“ü‚µAŒ»İŠÔ‚ğ0‚Æ‚·‚é
+            // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸåˆ†å¾ã€…ã«æ¸›ã‚‰ã™HPã®ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—
             DamagePlayerHPPersent = _LatePlayerHPPersent;
             StartTime = Time.time;
         }
 
-        // ƒ_ƒ[ƒW‚ğó‚¯‚Ä‚©‚ç‚ÌŒo‰ßŠÔ
+        // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã‹ã‚‰ã®çµŒéæ™‚é–“
         nowTime = Time.time - StartTime;
 
-        // Œ»İ‚ÌHP‚æ‚è™X‚ÉŒ¸‚ç‚·HP‚ª‘½‚­‚ÄŒo‰ßŠÔ‚ª2•bŒo‚Á‚Ä‚¢‚ê‚ÎAƒ_ƒ[ƒW‚ğó‚¯‚é‘O‚ÌHP‚ğ™X‚ÉŒ¸‚ç‚·
+        // ç¾åœ¨ã®HPã‚ˆã‚Šå¾ã€…ã«æ¸›ã‚‰ã™HPãŒå¤šãã¦ãƒ€ãƒ¡ãƒ¼ã‚¸ã®çµŒéæ™‚é–“ãŒ2ç§’ã‚’è¶Šãˆã¦ã„ãŸã‚‰ã€HPãŒæ¸›ã‚‹åˆ¶å¾¡
         if (nowPlayerHPPersent < DamagePlayerHPPersent & 2 < nowTime) DamagePlayerHPPersent -= 1 * Time.deltaTime;
 
-        // UI‚Ìƒf[ƒ^‚ÌƒZƒbƒg
+        // UIã®åˆ¶å¾¡
         PlayerNowHP.value = nowPlayerHPPersent;
         PlayerLateHP.fillAmount = DamagePlayerHPPersent;
     }
 
     /// <summary>
-    /// ƒL[“ü—Í‚Ì•\¦
+    /// ã‚­ãƒ¼å…¥åŠ›ã«ã‚ˆã‚‹UIã®åˆ¶å¾¡
     /// </summary>
     public void MoveUI()
     {
-        // ‘Î‰‚µ‚Ä‚¢‚éƒL[‚ğ“ü—Í‚µ‚Ä‚¢‚ê‚ÎÔA‚µ‚Ä‚¢‚È‚¯‚ê‚Î•‚É‚·‚é
+        // å¯¾å¿œã—ã¦ã„ã‚‹ã‚­ãƒ¼ãŒå…¥åŠ›ã•ã‚ŒãŸã‚‰èµ¤ã«ã€å…¥åŠ›ãŒå¤–ã‚ŒãŸã‚‰é»’ã«è‰²ã‚’å¤‰æ›´ã™ã‚‹
         if (_player.flont) KeyUI[0].color = Color.red; else KeyUI[0].color = Color.black;
         if (_player.back)  KeyUI[1].color = Color.red; else KeyUI[1].color = Color.black;
         if (_player.left)  KeyUI[2].color = Color.red; else KeyUI[2].color = Color.black;
         if (_player.right) KeyUI[3].color = Color.red; else KeyUI[3].color = Color.black;
         if (_player.run)   KeyUI[4].color = Color.red; else KeyUI[4].color = Color.black;
 
-        // ƒL[‚Ì–¼‘O‚ğ•\¦
+        // å¯¾å¿œã—ã¦ã„ã‚‹ã‚­ãƒ¼ã®åå‰ã‚’ã‚»ãƒƒãƒˆ
         KeyText[0].text = Controller.Flont.ToString();
         KeyText[1].text = Controller.Back.ToString();
         KeyText[2].text = Controller.Left.ToString();

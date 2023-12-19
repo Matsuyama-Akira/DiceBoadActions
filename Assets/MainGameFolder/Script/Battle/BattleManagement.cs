@@ -5,7 +5,7 @@ using Unity.AI.Navigation;
 
 public class BattleManagement : MonoBehaviour
 {
-    // •K{ƒXƒNƒŠƒvƒg
+    // å¿…é ˆã‚¹ã‚¯ãƒªãƒ—ãƒˆ
     private AllGameManagement manager;
     private WeponSellect weponSellect;
     private EnemySellect enemySellect;
@@ -13,68 +13,62 @@ public class BattleManagement : MonoBehaviour
     [SerializeField] NextScene sceneChenge;
     [SerializeField] BattleUIManagement uiManager;
 
-    /// <summary> Bow—p‚ÌƒŠƒ[ƒhUI </summary>
+    /// <summary> BowãŒå†åº¦æ‰“ã¦ã‚‹ã‚ˆã†ã«ãªã‚‹ã¾ã§ã®ã‚²ãƒ¼ã‚¸UI </summary>
     [SerializeField] GameObject reroadUI;
 
-    // ƒLƒƒƒ‰ƒNƒ^[‚Ì¶¬—pƒf[ƒ^
-    /// <summary> •Ší–ˆ‚ÌƒvƒŒƒCƒ„[ƒIƒuƒWƒFƒNƒg </summary>
-    [NamedArray(new string[] {"Sword", "Spire", "Bow", "Gun", "Magic"}), SerializeField] GameObject[] Player;
-    /// <summary> ƒvƒŒƒCƒ„[‚ÌƒXƒ|[ƒ“ƒ|ƒCƒ“ƒg </summary>
-    [SerializeField] GameObject PlayerSpawnPoint;
-    /// <summary> ƒŒƒxƒ‹–ˆ‚Ì“GƒIƒuƒWƒFƒNƒg </summary>
-    [NamedArray(new string[] {"Enemy1", "Enemy2", "Boss"}), SerializeField] GameObject[] Enemy;
-    /// <summary> “G‚ÌƒXƒ|[ƒ“ƒ|ƒCƒ“ƒg </summary>
-    [SerializeField] GameObject EnemySpawnPoint;
+    // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ç”Ÿæˆ
+    [NamedArray(new string[] {"Sword", "Spire", "Bow", "Gun", "Magic"}), SerializeField, Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ‡ãƒ¼ã‚¿")] GameObject[] Player;
+    [SerializeField, Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒãƒ¼ãƒ³åœ°ç‚¹")] GameObject PlayerSpawnPoint;
+    [NamedArray(new string[] {"Enemy1", "Enemy2", "Boss"}), SerializeField, Tooltip("æ•µã®ãƒ‡ãƒ¼ã‚¿")] GameObject[] Enemy;
+    [SerializeField, Tooltip("æ•µã®ã‚¹ãƒãƒ¼ãƒ³åœ°ç‚¹")] GameObject EnemySpawnPoint;
 
-    // ¶¬‚µ‚½ƒLƒƒƒ‰ƒNƒ^[‚Ìƒf[ƒ^ŠÇ—
-    /// <summary> ¶¬‚µ‚½ƒvƒŒƒCƒ„[ </summary>
+    // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãƒ‡ãƒ¼ã‚¿ã®ä¿æŒ
+    /// <summary> ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ </summary>
     private GameObject _player;
-    /// <summary> ¶¬‚µ‚½“G </summary>
+    /// <summary> æ•µã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ </summary>
     private GameObject _enemy;
-    /// <summary> ¶¬‚µ‚½ƒvƒŒƒCƒ„[ƒXƒe[ƒ^ƒX </summary>
+    /// <summary> ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ </summary>
     private PlayerStatus player;
-    /// <summary> ¶¬‚µ‚½“GƒXƒe[ƒ^ƒX </summary>
+    /// <summary> æ•µã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ </summary>
     private EnemyStates enemy;
 
-    /// <summary> ƒ}ƒbƒv‚ÌNavMeshƒf[ƒ^ </summary>
-    [SerializeField] NavMeshSurface mapNavMesh;
-    /// <summary> ƒvƒŒƒCƒ„[‚ª—^‚¦‚½ƒ_ƒ[ƒW </summary>
-    [SerializeField] int allDamage;
+    [SerializeField, Tooltip("NavMeshã®ç”Ÿæˆ")] NavMeshSurface mapNavMesh;
+    [SerializeField, Tooltip("ã“ã®ãƒãƒˆãƒ«ã§ä¸ãˆãŸãƒ€ãƒ¡ãƒ¼ã‚¸")] int allDamage;
 
-    /// <summary> ƒoƒgƒ‹ƒV[ƒ“‚É“ü‚Á‚½ŠÔ‚ğ0‚Æ‚·‚é‚½‚ß‚Ì•Ï” </summary>
+    /// <summary> ãƒãƒˆãƒ«ãŒé–‹å§‹ã—ãŸæ™‚é–“ </summary>
     private float startTime;
-    /// <summary> 0‚Æ‚µ‚½ŠÔ‚©‚ç‚ÌŒo‰ßŠÔ </summary>
+    /// <summary> ãƒãƒˆãƒ«ãŒé–‹å§‹ã—ã¦ã‹ã‚‰ã®çµŒéæ™‚é–“ </summary>
     private float nowTime;
 
     public void AddAllDamage(int damage) { allDamage += damage; }
     public int GetAllDamage() { return allDamage; }
 
     /// <summary>
-    /// ƒAƒZƒbƒg‚Ì“Ç‚İ‚İ“™‚Ì—§‚¿ã‚°
+    /// ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—
     /// </summary>
     void Awake()
     {
-        // ƒJ[ƒ\ƒ‹‚ğ”ñ•\¦
+        // ã‚«ãƒ¼ã‚½ãƒ«ã‚’éè¡¨ç¤º
         Cursor.lockState = CursorLockMode.Locked;
 
-        // •K—v‚ÈƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌƒLƒƒƒbƒVƒ…
+        // å¿…è¦ãªã‚¹ã‚¯ãƒªãƒ—ãƒˆã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥
         GameObject managerObject = GameObject.FindWithTag("GameManager");
         AllStatus = managerObject.GetComponent<AllGameStates>();
         manager = managerObject.GetComponent<AllGameManagement>();
         weponSellect = managerObject.GetComponent<WeponSellect>();
         enemySellect = managerObject.GetComponent<EnemySellect>();
 
-        // ƒIƒuƒWƒFƒNƒg‚Ì¶¬‚ÆƒXƒe[ƒ^ƒX‚ÌƒLƒƒƒbƒVƒ…
+        // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ç”Ÿæˆ
         _player = Instantiate(Player[(int)weponSellect.wepon], PlayerSpawnPoint.transform.position, PlayerSpawnPoint.transform.rotation);
         _enemy = Instantiate(Enemy[(int)enemySellect.GetLevel()], EnemySpawnPoint.transform.position, EnemySpawnPoint.transform.rotation);
         player = _player.GetComponent<PlayerStatus>();
         enemy = _enemy.GetComponent<EnemyStates>();
 
-        // UI‚Ì“Ç‚İ‚İ
+        // UIã®ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—
         uiManager.SetStatus(player);
         if (weponSellect.wepon != WeponSellect.Wepon.Bow) reroadUI.SetActive(false);
 
-        // ƒf[ƒ^‚ÌƒŠƒZƒbƒg
+        // ãƒãƒˆãƒ«ãƒ‡ãƒ¼ã‚¿ã®ãƒªã‚»ãƒƒãƒˆ
         allDamage = 0;
         startTime = Time.time;
     }
@@ -88,21 +82,21 @@ public class BattleManagement : MonoBehaviour
     }
 
     /// <summary>
-    /// ğŒ‚ğ–‚½‚µ‚½‚çƒV[ƒ“Ø‚è‘Ö‚¦“™‚Ìˆ—‚ğs‚¤
+    /// æ¡ä»¶ã‚’æº€ãŸã—ãŸã‚‰ã‚·ãƒ¼ãƒ³ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
     /// </summary>
     void IfStates()
     {
-        // “G‚ÌHP‚ª0‚É‚È‚Á‚½‚ç
+        // æ•µã®HPãŒ0ã«ãªã£ãŸã‚‰
         if (enemy.isDieAnimEnd)
         {
-            // •K—v‚Èƒf[ƒ^‚Ìó‚¯“n‚µ
+            // ãƒãƒˆãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡
             manager.AddBattleResult(0);
             AllStatus.AddPlayerHP(player.GetNowHP());
             AllStatus.AddPlayerLateHP();
             AllStatus.AddKillCount(1);
             AllStatus.AddAllDamage(allDamage);
 
-            // “|‚µ‚½“G‚ªƒ{ƒX‚Ìê‡‚ÍƒŠƒUƒ‹ƒg‚Ö
+            // ãƒœã‚¹ã‚’å€’ã—ãŸã‚‰ãƒªã‚¶ãƒ«ãƒˆã¸
             if (enemySellect.GetLevel() == EnemySellect.Level.Boss) sceneChenge.ChengeScene("ResultScene");
             else
             {
@@ -110,27 +104,27 @@ public class BattleManagement : MonoBehaviour
                 AllStatus.AddLateClear(true);
             }
 
-            // ƒJ[ƒ\ƒ‹‚Ì•\¦
+            // ã‚«ãƒ¼ã‚½ãƒ«ã®å†è¡¨ç¤º
             Cursor.lockState = CursorLockMode.Confined;
         }
 
-        // ƒvƒŒƒCƒ„[‚ÌHP‚ª0‚É‚È‚Á‚½‚ç
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPãŒ0ã«ãªã£ãŸã‚‰
         if (player.isDie)
         {
-            // •K—v‚Èƒf[ƒ^‚Ìó‚¯“n‚µ
+            // æ•—åŒ—ã®ãƒªã‚¶ãƒ«ãƒˆã¸
             manager.AddBattleResult(1);
             sceneChenge.ChengeScene("ResultScene");
 
-            // ƒJ[ƒ\ƒ‹‚Ì•\¦
+            // ã‚«ãƒ¼ã‚½ãƒ«ã®å†è¡¨ç¤º
             Cursor.lockState = CursorLockMode.Confined;
         }
 
-        // EscapeƒL[‚ğ“ü—Í‚µ‚½‚çƒJ[ƒ\ƒ‹‚Ì•\¦
+        // Escapeã‚’å…¥åŠ›ã—ãŸã‚‰ã‚«ãƒ¼ã‚½ãƒ«ã®å†è¡¨ç¤º
         if(Input.GetKey(KeyCode.Escape)) Cursor.lockState = CursorLockMode.Confined;
     }
 
     /// <summary>
-    /// Œo‰ßŠÔ‚ğƒZƒbƒg
+    /// çµŒéæ™‚é–“ã‚’ã‚»ãƒƒãƒˆ
     /// </summary>
     void SetNowTime()
     {
@@ -138,7 +132,7 @@ public class BattleManagement : MonoBehaviour
     }
 
     /// <summary>
-    /// UI‚ğ“®‚©‚·
+    /// UIåˆ¶å¾¡
     /// </summary>
     void UIManagement()
     {
@@ -148,7 +142,7 @@ public class BattleManagement : MonoBehaviour
     }
 
     /// <summary>
-    /// NavMesh‚ÌÄ¶¬
+    /// NavMeshã®å†ç”Ÿæˆ
     /// </summary>
     void ResetNavMesh()
     {

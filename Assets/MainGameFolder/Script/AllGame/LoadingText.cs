@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class LoadingText : MonoBehaviour
 {
+    /// <summary> ロード時間中のフレーム管理 </summary>
     int loadTime;
-    [SerializeField] TextMeshProUGUI loadText;
+    [SerializeField, Tooltip("ロード時間のテキスト")] TextMeshProUGUI loadText;
 
     void Update()
     {
+        // ロード中なら
         if (this.gameObject.activeSelf)
         {
             switch (loadTime)
