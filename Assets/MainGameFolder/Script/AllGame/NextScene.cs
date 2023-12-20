@@ -8,6 +8,7 @@ namespace NextSceneScript
 {
     public class NextScene : MonoBehaviour
     {
+        /// <summary> 次のシーン名 </summary>
         private enum _NextScene
         {
             TitleScene, WeponSellectScene, DiceBoadScene, BattleScene, ResultScene, OperationSettingScene,
@@ -30,22 +31,6 @@ namespace NextSceneScript
         {
             manager = GameObject.FindWithTag("GameManager").GetComponent<AllGameManagement>();
             status = GameObject.FindWithTag("GameManager").GetComponent<AllGameStates>();
-        }
-
-        public void _ChengeScene()
-        {
-            loadUI.SetActive(true);
-            manager.PreviousSceneChenge();
-            StartCoroutine(SceneChenge(scene.ToString()));
-        }
-
-        public void ChengeSceneForTitle()
-        {
-            loadUI.SetActive(true);
-            manager.PreviousSceneChenge();
-            status.AllReset();
-
-            StartCoroutine(SceneChenge(scene.ToString()));
         }
 
         public void ChengeScene(string SceneName)
