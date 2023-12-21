@@ -24,7 +24,7 @@ public class EnemyMove : MonoBehaviour
     [SerializeField, Tooltip("このキャラクターのNavMeshAgentを入れる")] NavMeshAgent agent;
     [SerializeField, Tooltip("このキャラクターのアニメーターを入れる")] Animator animator;
     [SerializeField, Tooltip("このキャラクターのEnemyStatesを入れる")] EnemyStates states;
-    [SerializeField, Tooltip("このキャラクターのEnemyIsGroundedを入れる")] EnemyIsGrounded isGroundCheck;
+    [SerializeField, Tooltip("このキャラクターのGroundedCheckerを入れる")] GroundedChecker isGroundCheck;
     [SerializeField, Tooltip("このキャラクターのEnemyAttackを入れる")] EnemyAttack attack;
 
     [Space, Header("デバッグ用の表示ステータス")]

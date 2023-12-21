@@ -4,36 +4,48 @@ using UnityEngine.UI;
 
 public class ViewFPS : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("フレームレートの処理速度")]
     private float Interval = 0.1f;
 
-    private TextMeshProUGUI _tex;
+    // フレームレートのテキスト
+    private TextMeshProUGUI fpsText;
 
-    private float _time_cnt;
-    private int _frames;
-    private float _time_mn;
-    private float _fps;
+    // 経過時間と処理にかかった時間
+    private float elapsedTime, timeCount;
+    // 呼び出し回数
+    private int frame;
+    // 計算したフレームレート
+    private float fps;
 
     private void Start()
     {
-        // �e�L�X�g�R���|�[�l���g�̎擾
-        _tex = this.GetComponent<TextMeshProUGUI>();
+        // FPS表示のテキストコンポーネントをロード
+        fpsText = this.GetComponent<TextMeshProUGUI>();
     }
 
-    // FPS�̕\���ƌv�Z
     private void Update()
     {
-        _time_mn -= Time.deltaTime;
-        _time_cnt += Time.timeScale / Time.deltaTime;
-        _frames++;
+        // 経過時間の計測
+        elapsedTime -= Time.deltaTime;
 
-        if (0 < _time_mn) return;
+        // 前フレームからの経過時間の加算
+        timeCount += Time.timeScale / Time.deltaTime;
+        // 計測回数の加算
+        frame++;
 
-        _fps = _time_cnt / _frames;
-        _time_mn = Interval;
-        _time_cnt = 0;
-        _frames = 0;
+        // 経過時間が0.1秒以上なら
+        if (0 >= elapsedTime)
+        {
+            // フレームレートの計算
+            fps = timeCount / frame;
 
-        _tex.text = "FPS: " + _fps.ToString("f2");
+            // 計算結果の表示
+            fpsText.text = "FPS: " + fps.ToString("f2");
+
+            // 処理の初期化
+            elapsedTime = Interval;
+            timeCount = 0;
+            frame = 0;
+        }
     }
 }
