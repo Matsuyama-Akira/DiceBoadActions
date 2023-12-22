@@ -111,6 +111,8 @@ public class BattleManagement : MonoBehaviour
         // プレイヤーのHPが0になったら
         if (player.isDie)
         {
+            Debugger();
+
             // 敗北のリザルトへ
             manager.AddBattleResult(1);
             sceneChenge.ChengeScene("ResultScene");
@@ -147,5 +149,10 @@ public class BattleManagement : MonoBehaviour
     void ResetNavMesh()
     {
         mapNavMesh.BuildNavMesh();
+    }
+
+    void Debugger()
+    {
+        Debug.LogError(player.GetNowHP());
     }
 }

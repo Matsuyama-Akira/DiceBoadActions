@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    // •K{ƒXƒNƒŠƒvƒg
+    // ï¿½Kï¿½{ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½g
     [Header("Assets")]
     private AllGameStates status;
     [SerializeField] GroundChecker groundCheck;
 
-    // ƒvƒŒƒCƒ„[ƒXƒe[ƒ^ƒX
+    // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Xï¿½eï¿½[ï¿½^ï¿½X
     [Space, Header("Status")]
-    [Range(1, 10), SerializeField, Tooltip("UŒ‚—Í")] int attackDamage;
+    [Range(1, 10), SerializeField, Tooltip("ï¿½Uï¿½ï¿½ï¿½ï¿½")] int attackDamage;
     [SerializeField] bool canRun = true;
     private int nowHP;
     private int lateHP;
