@@ -57,16 +57,12 @@ public class ArrowHit : MonoBehaviour
     /// <param name="hit"> 追加ヒット数(基本は1) </param>
     public void AddHitCount(int hit)        { hitCount += hit; }
 
-    /// <summary> 矢の属性を返す </summary>
     /// <returns> 矢の属性(貫通/非貫通) </returns>
     public ArrowType GetArrowType() { return arrowType; }
-    /// <summary> 基本ダメージ量を返す </summary>
     /// <returns> 基本ダメージ </returns>
     public int GetDamage()          { return arrowDamage; }
-    /// <summary> クリティカル確率を返す </summary>
     /// <returns> クリティカル確率 </returns>
     public int GetCriticalRange()   { return criticalRange; }
-    /// <summary> 現在のヒット数を返す </summary>
     /// <returns> ヒット数 </returns>
     public int GetHitCount()        { return hitCount; }
 
@@ -89,6 +85,8 @@ public class ArrowHit : MonoBehaviour
             col.enabled = false;
             Destroy(gameObject, 3.0f);
         }
+
+        // 衝突対象が敵オブジェクトなら
         if(other.gameObject.tag == "Enemy")
         {
             // ヒット音を鳴らす

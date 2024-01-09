@@ -29,15 +29,15 @@ public class BowSellection
     /// <summary> この武器のレベル選択 </summary>
     public Level level;
 
-    /// <summary>  </summary>
+    /// <summary> この武器の矢の属性 </summary>
     public BowType type;
 
-    /// <summary>  </summary>
+    /// <summary> 基礎ダメージ </summary>
     [Range(1, 100)] public int baseDamage;
 
-    /// <summary>  </summary>
+    /// <summary> チャージ量倍率の最大値 </summary>
     [Range(1.0f, 2.0f)] public float magunification;
 
-    /// <summary>  </summary>
+    /// <summary> クリティカル確率 </summary>
     [Range(0, 100)] public int criticalRange;
 }
