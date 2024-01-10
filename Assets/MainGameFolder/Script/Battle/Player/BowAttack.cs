@@ -27,7 +27,7 @@ public class BowAttack : MonoBehaviour
     [SerializeField] GameObject arrow;
     [SerializeField] Transform arrowPoint;
     [SerializeField] BattleUIManagement battleUI;
-    [SerializeField] ChargeMaterUI chargeUI;
+    [SerializeField] BowUI bowUI;
     [SerializeField] PlayerStatus status;
     [Space]
     [Header("States")]
@@ -47,12 +47,17 @@ public class BowAttack : MonoBehaviour
     /// </summary>
     void Awake()
     {
+        // Findでマネージャーを検索しオブジェクトとして取得
         GameObject manager = GameObject.FindWithTag("GameManager");
         GameObject Bmanager = GameObject.Find("BattleManager");
+
+        // 取得したオブジェクトから必要なスクリプトを取得
         sellect = manager.GetComponent<WeponSellect>();
         seManager = manager.GetComponent<AllGameSEManager>();
         battleUI = Bmanager.GetComponent<BattleUIManagement>();
-        chargeUI = Bmanager.GetComponent<ChargeMaterUI>();
+        bowUI = Bmanager.GetComponent<BowUI>();
+
+        // Bowのパラメーターを取得
         BowSetUP();
     }
 
@@ -120,7 +125,7 @@ public class BowAttack : MonoBehaviour
         if(chargeTime >= maxCharge) chargeTime = maxCharge;
 
         // チャージ用のUIを起動する
-        chargeUI.StartMeterRadial();
+        bowUI.StartMeterRadial();
     }
     /// <summary>
     /// 攻撃パターン毎に射撃方法を変える
@@ -231,7 +236,7 @@ public class BowAttack : MonoBehaviour
             resetShot += 0.1f * Time.deltaTime;
         }
         else resetShot = shotInterval;
-        chargeUI.ReroadingUI(resetShot / shotInterval);
+        bowUI.ReroadingUI(resetShot / shotInterval);
     }
 
     /// <summary>

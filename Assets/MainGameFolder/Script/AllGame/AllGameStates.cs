@@ -15,7 +15,7 @@ namespace AllGameManager
         /// <summary> ダメージを受ける前のプレイヤーのHP </summary>
         private int playerLateHP;
 
-        //Result status
+        // リザルト用の数値
         /// <summary> 倒した敵の数 </summary>
         private int enemyKillCount;
         /// <summary> 与えたダメージの総数 </summary>
@@ -25,7 +25,7 @@ namespace AllGameManager
         /// <summary> すごろくでイベントマスに止まった数 </summary>
         private int eventMass;
 
-        //Diceboad status
+        // すごろく用のステータス
         /// <summary> ゲームをスタートしたか </summary>
         private bool start = false;
         /// <summary> マスをクリアしたか </summary>
