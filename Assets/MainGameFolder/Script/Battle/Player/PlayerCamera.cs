@@ -43,7 +43,7 @@ public class PlayerCamera : MonoBehaviour
                 break;
             // マウスの速度から
             case CameraType.MoveRange:
-                MouceMoveRangeCamera();
+                MouseMoveRangeCamera();
                 break;
         }
 
@@ -52,35 +52,47 @@ public class PlayerCamera : MonoBehaviour
     }
     void MoucePositionCamera()
     {
-
+        // マウスの移動量を取得
         Vector2 mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
         mouseDeltaY = mouseDelta.y;
+
+        // 数値の補正
         Vector2 rawFrameVelocity = Vector2.Scale(mouseDelta, Vector2.one * Controller.AllSensitivity);
+
+        // 前フレームの位置と現フレームの位置から直線で補間する
         frameVelocity = Vector2.Lerp(frameVelocity, rawFrameVelocity, 1 / smoothing);
+
+        // 位置の更新　Y軸は-90~90の間にする
         velocity += frameVelocity;
         velocity.y = Mathf.Clamp(velocity.y, -90, 90);
 
+        // Y軸はカメラを動かし、X軸はキャラクターを動かす
         transform.localRotation = Quaternion.AngleAxis(-velocity.y * Controller.SensiY, Vector3.right);
         character.localRotation = Quaternion.AngleAxis(velocity.x * Controller.SensiX, Vector3.up);
     }
-    void MouceMoveRangeCamera()
+    void MouseMoveRangeCamera()
     {
+        // マウスの移動量を取得
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
-
         rotationAmount = new Vector2(mouseX, -mouseY) * sensitivity;
+
+        // カメラのX軸回転が-90以下もしくは90以上ならば、Y軸の移動量を0にする
         if (transform.rotation.x <= -90 | transform.rotation.x >= 90) rotationAmount.y = 0;
+
+        // Y軸はカメラを動かし、X軸はキャラクターを動かす
         transform.localRotation *= Quaternion.AngleAxis(rotationAmount.y, Vector3.right);
         character.localRotation *= Quaternion.AngleAxis(rotationAmount.x, Vector3.up);
     }
 
     void UpdateCursorLock()
     {
+        // マウスカーソルの表示処理
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             cursorLock = false;
         }
-        else if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0))
         {
             cursorLock = true;
         }
@@ -90,7 +102,7 @@ public class PlayerCamera : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
-        else if (!cursorLock)
+        else
         {
             Cursor.lockState = CursorLockMode.None;
         }

@@ -5,63 +5,80 @@ using System.Collections;
 
 public class DiceBoadManagement : MonoBehaviour
 {
-    /// <summary> Mass status </summary>
+    /// <summary> マスの種類 </summary>
     public enum CurrentMassStatus
     {
         Normal, Items, Heal, Enemy1, Enemy2, Boss,
     }
-    /// <summary> Switch to next scene </summary>
+
+    // 必須スクリプト
     private NextScene chengeScene;
-    /// <summary> Selected Weapons </summary>
     private WeponSellect wepon;
-    /// <summary> All game status paramerter </summary>
     private AllGameStates playerStatus;
-    /// <summary> Selected Enemys </summary>
     private EnemySellect enemy;
-    /// <summary> All game sound effect manager </summary>
     private AllGameSEManager seManager;
 
     [Header("Charactor")]
-    [SerializeField] Transform startPosition;
-    [SerializeField] GameObject playerObject;
-    [SerializeField] GameObject _player;
-    [SerializeField] Transform player;
-    [SerializeField] Animator playerAnimator;
-    [SerializeField, Range(5f, 100f)] float moveSpeed = 5.0f;
+    [SerializeField, Tooltip("プレイヤーがスタートするマスのトランスフォーム")] Transform startPosition;
+    [SerializeField, Tooltip("プレイヤーオブジェクト")] GameObject playerObject;
+    [SerializeField, Tooltip("プレイヤーのインスタンス")] GameObject _player;
+    [SerializeField, Tooltip("プレイヤーのトランスフォーム")] Transform player;
+    [SerializeField, Tooltip("プレイヤーのアニメーター")] Animator playerAnimator;
+    [SerializeField, Range(5f, 100f), Tooltip("移動速度")] float moveSpeed = 5.0f;
 
     [Space, Header("Dice")]
-    [SerializeField] GameObject[] DiceObject;
-    [SerializeField] Transform DiceSpawnPosition;
-    [SerializeField] GameObject _dice;
-    [SerializeField] Dice diceScript;
+    [SerializeField, Tooltip("サイコロのオブジェクト")] GameObject[] DiceObject;
+    [SerializeField, Tooltip("サイコロの生成地点")] Transform DiceSpawnPosition;
+    [SerializeField, Tooltip("サイコロのインスタンス")] GameObject _dice;
+    [SerializeField, Tooltip("サイコロのスクリプト")] Dice diceScript;
 
     [Space, Header("MapEffect")]
-    [SerializeField] GameObject healEffect;
+    [SerializeField, Tooltip("回復のエフェクト")] GameObject healEffect;
 
     [Space, Header("ClearList")]
-    [SerializeField] DB_ClearList clearList;
+    [SerializeField, Tooltip("すごろくのクリアリスト")] DB_ClearList clearList;
 
     //Private status
+    /// <summary> 移動できる数 </summary>
     private int movePoint;
+    /// <summary> 経過したターン数 </summary>
     public bool playerTurn { get; private set; }
+    /// <summary> 待機中 </summary>
     private bool isStandby;
+    /// <summary> 移動中 </summary>
     private bool isMoving;
+    /// <summary> 移動後 </summary>
     private bool isMoved = true;
+    /// <summary> 対象へ移動を終えたか </summary>
     public bool moveOut { get; private set; }
+    /// <summary> 次の移動先 </summary>
     private Vector3 nextPosition;
+    /// <summary> 横や後ろへの移動時の回転 </summary>
     private Quaternion nextQuaternion;
+    /// <summary> 移動先が移動できるか </summary>
     private bool[] moveChecks = new bool[4];
+    /// <summary> 移動可能方向への矢印オブジェクト </summary>
     private GameObject[] Arrow = new GameObject[4];
+    /// <summary> 次のマスのトランスフォーム </summary>
     private Transform[] nextMass = new Transform[4];
+    /// <summary> 現在立っているマスの種類 </summary>
     private CurrentMassStatus nowMass;
+    /// <summary> クリアしたか </summary>
     private bool lateClear;
+    /// <summary> クリアしたマスか </summary>
     public static bool[,] clearMass = new bool[11, 11];
+    /// <summary> 新しい武器の種類とレアリティ </summary>
     private int[] newWepons = new int[2];
+    /// <summary> 新しい武器を選んだか </summary>
     private bool isWeponSellect;
+    /// <summary> 回復したか </summary>
     private bool healing;
+    /// <summary> 宝箱を開けたか </summary>
     private bool itemBoxOpening;
+    /// <summary> 敵を倒したか </summary>
     static private bool enemyDown;
 
+    // キー入力を流用
     public bool flont { get; private set; }
     public bool back { get; private set; }
     public bool right { get; private set; }
@@ -74,48 +91,49 @@ public class DiceBoadManagement : MonoBehaviour
 
     void Awake()
     {
+        // セットアップ
         GameObject _manager = GameObject.FindWithTag("GameManager");
         wepon = _manager.GetComponent<WeponSellect>();
         playerStatus = _manager.GetComponent<AllGameStates>();
         seManager = _manager.GetComponent<AllGameSEManager>();
         enemy = _manager.GetComponent<EnemySellect>();
         chengeScene = GetComponent<NextScene>();
+
+        // ステータスの初期化
         Cursor.lockState = CursorLockMode.None;
         isMoving = false;
         isMoved = true;
+
+        // ゲームスタート直後か
         if (playerStatus.GetStart())
         {
+            // プレイヤーを前回の地点に生成
             _player = Instantiate(playerObject, playerStatus.GetLatePosition(), playerStatus.GetLateQuaternion());
         }
         else
         {
+            // ステータスの初期化
             healing = false;
             itemBoxOpening = false;
             enemyDown = false;
             playerStatus.ResetHP();
             playerStatus.AddPlayerLateHP();
+
+            // プレイヤーを初期スポーン地点に生成
             _player = Instantiate(playerObject, startPosition);
             playerStatus.AddStart();
         }
+
+        // 生成したプレイヤーからステータスを取得
         playerAnimator = _player.GetComponentInChildren<Animator>();
         nextPosition = _player.transform.position;
         lateClear = playerStatus.GetLateClear();
-        int arrow = 0;
-        while (arrow < 4)
-        {
-            switch (arrow)
-            {
-                case 0:
-                    Arrow[arrow] = GameObject.Find("Arrow_F"); break;
-                case 1:
-                    Arrow[arrow] = GameObject.Find("Arrow_B"); break;
-                case 2:
-                    Arrow[arrow] = GameObject.Find("Arrow_R"); break;
-                case 3:
-                    Arrow[arrow] = GameObject.Find("Arrow_L"); break;
-            }
-            arrow++;
-        }
+
+        // 進行方向の矢印オブジェクトを取得
+        Arrow[0] = GameObject.Find("Arrow_F");
+        Arrow[1] = GameObject.Find("Arrow_B");
+        Arrow[2] = GameObject.Find("Arrow_R");
+        Arrow[3] = GameObject.Find("Arrow_L");
     }
 
     void Update()
@@ -128,7 +146,7 @@ public class DiceBoadManagement : MonoBehaviour
     {
         switch (nowMass)
         {
-            //Normal
+            // Normalマス　何もしない
             case CurrentMassStatus.Normal:
                 if (!isMoving & moveOut)
                 {
@@ -136,7 +154,7 @@ public class DiceBoadManagement : MonoBehaviour
                     isMoved = true;
                 }
                 break;
-            //Items
+            // Itemsマス　宝箱を開く　SEを再生　その後武器選択
             case CurrentMassStatus.Items:
                 if (!isMoving & moveOut)
                 {
@@ -147,7 +165,7 @@ public class DiceBoadManagement : MonoBehaviour
                     isMoved = true;
                 }
                 break;
-            //Heal
+            // Healマス　プレイヤーのHPを最大値に回復　エフェクトを生成　SEを再生
             case CurrentMassStatus.Heal:
                 if (!isMoving & !isMoved & moveOut)
                 {
@@ -160,7 +178,7 @@ public class DiceBoadManagement : MonoBehaviour
                     isMoved = true;
                 }
                 break;
-            //Enemy1
+            // Enemy1マス　敵のレベルをセット　バトルシーンへ
             case CurrentMassStatus.Enemy1:
                 if (!isMoving & !isMoved & moveOut)
                 {
@@ -170,7 +188,7 @@ public class DiceBoadManagement : MonoBehaviour
                     SceneChenge("BattleScene");
                 }
                 break;
-            //Enemy2
+            // Enemy2マス　敵のレベルをセット　バトルシーンへ
             case CurrentMassStatus.Enemy2:
                 if (!isMoving & !isMoved & moveOut)
                 {
@@ -180,7 +198,7 @@ public class DiceBoadManagement : MonoBehaviour
                     SceneChenge("BattleScene");
                 }
                 break;
-            //Boss
+            // Bossマス　敵のレベルをセット　バトルシーンへ
             case CurrentMassStatus.Boss:
                 enemy.AddLevel(3);
                 SceneChenge("BattleScene");
@@ -190,21 +208,31 @@ public class DiceBoadManagement : MonoBehaviour
 
     void GamePlay()
     {
+        // Boolや入力の管理
         Manager();
+
+        // プレイヤーが動かせるなら
         if (playerTurn)
         {
+            // サイコロを生成していない時にSkillキーを入力したら
             if (skill & _dice == null)
             {
+                // 経過ターンを増やす
                 playerStatus.AddPlayTurn();
+
+                // ランダムな色のサイコロを生成し、スクリプトを取得してSEを再生
                 int random = Random.Range(0, 5);
                 _dice = Instantiate(DiceObject[random], DiceSpawnPosition.position, DiceObject[random].transform.rotation);
                 diceScript = _dice.GetComponentInChildren<Dice>();
                 if (seManager.DB_AnySE[1] != null & seManager.DB_MassSESource != null) seManager.DB_MassSESource.PlayOneShot(seManager.DB_AnySE[1]);
             }
+            // サイコロのスクリプトがNullではない場合
             if (diceScript != null)
             {
+                // サイコロが静止したら
                 if (diceScript.GetIsStoping())
                 {
+                    // サイコロの結果を取得し、プレイヤーを動かす
                     movePoint = diceScript.GetResult();
                     isMoved = false;
                     lateClear = false;
@@ -213,11 +241,14 @@ public class DiceBoadManagement : MonoBehaviour
                 }
             }
         }
+
+        // アニメーションの再生
         MoveAnim();
     }
 
     private IEnumerator Move()
     {
+        // 移動中
         isMoving = true;
         while (movePoint > 0)
         {
