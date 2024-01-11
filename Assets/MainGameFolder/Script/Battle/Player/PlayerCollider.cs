@@ -1,13 +1,13 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class PlayerCollider : MonoBehaviour
 {
-    // •K{ƒXƒNƒŠƒvƒg
+    // å¿…é ˆã‚¹ã‚¯ãƒªãƒ—ãƒˆ
     private PlayerStatus status;
     private PlayerController controller;
 
     /// <summary>
-    /// ƒXƒNƒŠƒvƒg‚ÌƒLƒƒƒbƒVƒ…
+    /// ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥
     /// </summary>
     private void Awake()
     {
@@ -16,27 +16,27 @@ public class PlayerCollider : MonoBehaviour
     }
 
     /// <summary>
-    /// ‚±‚ÌƒXƒNƒŠƒvƒg‚ª“K—p‚³‚ê‚Ä‚¢‚éƒRƒ‰ƒCƒ_[‚ÉÕ“Ë‚µ‚½‚Æ‚«‚Ìˆ—
+    /// ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆãŒé©ç”¨ã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã«è¡çªã—ãŸã¨ãã®å‡¦ç†
     /// </summary>
-    /// <param name="other"> ‘ÎÛ‚ÌƒRƒ‰ƒCƒ_[ </param>
+    /// <param name="other"> å¯¾è±¡ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ </param>
     private void OnTriggerEnter(Collider other)
     {
-        // Õ“Ë‚µ‚½ƒRƒ‰ƒCƒ_[‚Ìƒ^ƒO‚ªEnemyAttackCollider‚È‚ç‚Î
+        // è¡çªã—ãŸã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã‚¿ã‚°ãŒEnemyAttackColliderãªã‚‰ã°
         if(other.gameObject.tag == "EnemyAttackCollider")
         {
-            // EnemyAttack‚Ìƒqƒbƒg”‚ª0‚È‚ç‚Îƒ_ƒ[ƒWˆ—‚ğs‚¤
+            // EnemyAttackã®ãƒ’ãƒƒãƒˆæ•°ãŒ0ãªã‚‰ã°ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†ã‚’è¡Œã†
             if (other.GetComponentInParent<EnemyAttack>().GetHit() < 1)
             {
-                // ƒvƒŒƒCƒ„[‚Ìƒ_ƒ[ƒW‚ğó‚¯‚é‘O‚ÌHP‚ğ‘ã“ü
+                // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹å‰ã®HPã‚’ä»£å…¥
                 status.AddLateHP();
 
-                // ó‚¯‚½ƒ_ƒ[ƒW•ªHP‚ğŒ¸‚ç‚·
+                // å—ã‘ãŸãƒ€ãƒ¡ãƒ¼ã‚¸åˆ†HPã‚’æ¸›ã‚‰ã™
                 status.AddHP(other.GetComponentInParent<EnemyStates>().GetAttackDamage());
 
-                // EnemyAttack‚Ìƒqƒbƒg”‚ğ1‘‚â‚·
+                // EnemyAttackã®ãƒ’ãƒƒãƒˆæ•°ã‚’1å¢—ã‚„ã™
                 other.GetComponentInParent<EnemyAttack>().AddHit(1);
 
-                // ƒvƒŒƒCƒ„[‚Ìƒ_ƒ[ƒWƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+                // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
                 controller.AddHitAnim();
             }
         }

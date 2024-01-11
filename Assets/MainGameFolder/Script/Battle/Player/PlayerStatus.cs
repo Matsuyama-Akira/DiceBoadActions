@@ -1,16 +1,14 @@
-using AllGameManager;
+﻿using AllGameManager;
 using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    // �K�{�X�N���v�g
     [Header("Assets")]
     private AllGameStates status;
     [SerializeField] GroundChecker groundCheck;
 
-    // �v���C���[�X�e�[�^�X
     [Space, Header("Status")]
-    [Range(1, 10), SerializeField, Tooltip("�U����")] int attackDamage;
+    [Range(1, 10), SerializeField, Tooltip("")] int attackDamage;
     [SerializeField] bool canRun = true;
     private int nowHP;
     private int lateHP;
