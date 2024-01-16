@@ -11,6 +11,7 @@ public class ThisPositionColliderChecker : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        // 現在いるマスからステータスを取得し、処理を行う
         if(other.gameObject.tag == "Map" & other.gameObject.GetComponent<MoveChecker>() != null)
         {
             MoveChecker status = other.gameObject.GetComponent<MoveChecker>();

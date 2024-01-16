@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DiceBoadUIManagement : MonoBehaviour
 {
+    // 動かしたいUI
     [SerializeField] GameObject PlayerTurnUI;
     [SerializeField, NamedArray(new string[] { "Sword", "Bow" })] Image[] nowWeponImage;
     [SerializeField] Image nowWeponRarelity;
@@ -20,20 +21,24 @@ public class DiceBoadUIManagement : MonoBehaviour
     [SerializeField] TextMeshProUGUI StandbyRollText;
     [SerializeField] AnimationCurve StandbyWaitTime;
 
-    private AllGameStates _gameStatus;
+    // 必須スクリプト
+    private AllGameStates gameStatus;
+    private WeponSellect wepon;
+    private DiceBoadManagement DBmanager;
+
+    // 動かすために必要なパラメーター
     public float LatePlayerHPPersent;
     public float DamagePlayerHPPersent;
     private bool AddLate;
     private float StartTime;
     private float nowTime;
-    private WeponSellect wepon;
-    private DiceBoadManagement _manager;
 
     void Start()
     {
+        // 必須スクリプトをセットアップ
         wepon = GameObject.FindWithTag("GameManager").GetComponent<WeponSellect>();
-        _gameStatus = GameObject.FindWithTag("GameManager").GetComponent<AllGameStates>();
-        _manager = GetComponent<DiceBoadManagement>();
+        gameStatus = GameObject.FindWithTag("GameManager").GetComponent<AllGameStates>();
+        DBmanager = GetComponent<DiceBoadManagement>();
     }
 
     void Update()
@@ -45,22 +50,21 @@ public class DiceBoadUIManagement : MonoBehaviour
 
     void UIText()
     {
-        MovePointText.text = _manager.GetMovePoint().ToString();
-        if (!_manager.GetIsStandby()) StandbyRollText.alpha = 0;
-        else
-        {
-            StandbyRollText.alpha = StandbyWaitTime.Evaluate(Time.time);
-        }
+        // テキストを更新
+        MovePointText.text = DBmanager.GetMovePoint().ToString();
+        if (!DBmanager.GetIsStandby()) StandbyRollText.alpha = 0;
+        else StandbyRollText.alpha = StandbyWaitTime.Evaluate(Time.time);
     }
 
     void UIImage()
     {
         NowWeponImage();
-        NowPlayerHPUI((float)_gameStatus.GetPlayerHP() / _gameStatus.GetWeponHP(), (float)_gameStatus.GetLateHP() / _gameStatus.GetWeponHP());
+        NowPlayerHPUI((float)gameStatus.GetPlayerHP() / gameStatus.GetWeponHP(), (float)gameStatus.GetLateHP() / gameStatus.GetWeponHP());
     }
 
     void NowWeponImage()
     {
+        // 武器の種類から画像を変更
         switch (wepon.wepon)
         {
             case AllGameManager.WeponSellect.Wepon.Sword:
@@ -73,45 +77,51 @@ public class DiceBoadUIManagement : MonoBehaviour
                 break;
         }
 
+        // 武器のレアリティから背景色を変更
         nowWeponRarelity.color = WeponRarelity[(int)wepon.rarelity];
     }
 
+    /// <param name="nowPlayerHPPersent"> 現在のHPの割合 </param>
+    /// <param name="_LatePlayerHPPersent"> HPが変化する前のHPの割合 </param>
     void NowPlayerHPUI(float nowPlayerHPPersent, float _LatePlayerHPPersent)
     {
+        // HPが変化したら
         if (LatePlayerHPPersent != _LatePlayerHPPersent)
         {
+            // HP状況を更新し、ダメージや回復のアニメーション処理をスタート
             if (LatePlayerHPPersent < _LatePlayerHPPersent) AddLate = true;
             else AddLate = false;
             LatePlayerHPPersent = _LatePlayerHPPersent;
             DamagePlayerHPPersent = _LatePlayerHPPersent;
             StartTime = Time.time;
         }
+
+        // 経過時間
         nowTime = Time.time - StartTime;
-        if (AddLate)
-        {
-            if (nowPlayerHPPersent > DamagePlayerHPPersent & 2 < nowTime) DamagePlayerHPPersent += 1 * Time.deltaTime;
-        }
-        else
-        {
-            if (nowPlayerHPPersent < DamagePlayerHPPersent & 2 < nowTime) DamagePlayerHPPersent -= 1 * Time.deltaTime;
-        }
+
+        // ダメージまたは回復のアニメーション処理
+        if (AddLate) if (nowPlayerHPPersent > DamagePlayerHPPersent & 2 < nowTime) DamagePlayerHPPersent += 1 * Time.deltaTime;
+        else if (nowPlayerHPPersent < DamagePlayerHPPersent & 2 < nowTime) DamagePlayerHPPersent -= 1 * Time.deltaTime;
         PlayerNowHP.value = nowPlayerHPPersent;
         PlayerLateHP.fillAmount = DamagePlayerHPPersent;
     }
 
     void WeponSellect()
     {
-        if (_manager.GetIsWeponSellect())
+        // 武器の選択処理が開始したらUIを表示
+        if (DBmanager.GetIsWeponSellect())
         {
             WeponSellectUI.SetActive(true);
             NewWeponImage();
             OldWeponImage();
         }
+        // 処理が終わったらUIを非表示
         else WeponSellectUI.SetActive(false);
     }
     void NewWeponImage()
     {
-        switch (_manager.GetNewWepons(0))
+        // 新しい武器の種類から画像を更新
+        switch (DBmanager.GetNewWepons(0))
         {
             case 0:
                 newWeponImage[0].enabled = false;
@@ -123,10 +133,12 @@ public class DiceBoadUIManagement : MonoBehaviour
                 break;
         }
 
-        newWeponRarelity.color = WeponRarelity[_manager.GetNewWepons(1)];
+        // 新しい武器のレアリティから背景色を更新
+        newWeponRarelity.color = WeponRarelity[DBmanager.GetNewWepons(1)];
     }
     void OldWeponImage()
     {
+        // 現在の武器の種類から画像を更新
         switch (wepon.wepon)
         {
             case AllGameManager.WeponSellect.Wepon.Sword:
@@ -139,6 +151,7 @@ public class DiceBoadUIManagement : MonoBehaviour
                 break;
         }
 
+        // 現在の武器のレアリティから背景色を更新
         oldWeponRarelity.color = WeponRarelity[(int)wepon.rarelity];
     }
 }

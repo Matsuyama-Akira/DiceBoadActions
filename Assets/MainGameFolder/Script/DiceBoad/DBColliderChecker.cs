@@ -3,6 +3,7 @@ using UnityEngine;
 public class DBColliderChecker : MonoBehaviour
 {
     [SerializeField] private DiceBoadManagement _Manager;
+    /// <summary> コライダー衝突判定 </summary>
     private bool colliderHit;
 
     private void Awake()
@@ -12,6 +13,7 @@ public class DBColliderChecker : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // コライダーが衝突していない場合、マネージャーにfalseを渡す
         if (colliderHit == false)
         {
             switch (gameObject.name)
@@ -26,9 +28,13 @@ public class DBColliderChecker : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        // コライダーがマップのマスに衝突しているならば
         if (other.gameObject.tag == "Map" & other.gameObject.GetComponent<MoveChecker>() != null)
         {
+            // コライダー衝突判定をtrueにする
             colliderHit = true;
+
+            // マスのステータスを取得して、boolとtransformを渡す
             MoveChecker status = other.gameObject.GetComponent<MoveChecker>();
             bool moveCheck = status.GetMoveCheck();
             switch (gameObject.name)
@@ -43,6 +49,7 @@ public class DBColliderChecker : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        // コライダーが衝突していない場合は衝突判定をfalseにする
         if (other.gameObject.tag == "Map" & other.gameObject.GetComponent<MoveChecker>() != null)
         {
             colliderHit = false;
