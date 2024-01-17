@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
+        animator = GameObject.Find("Male A Variant").GetComponent<Animator>();
         status = GetComponent<PlayerStatus>();
     }
 

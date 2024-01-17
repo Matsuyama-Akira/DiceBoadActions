@@ -162,7 +162,7 @@ public class BowAttack : MonoBehaviour
             int _ADamage = (int)(baseDamage * magunification * chargeTime * nurfDamage);
 
             // 矢の生成
-            GameObject _A = Instantiate(arrow, new Vector3(arrowPoint.position.x, arrowPoint.position.y, arrowPoint.position.z), arrowPoint.rotation * Quaternion.AngleAxis(Random.Range(-10.0f, 10.0f), Vector3.up));
+            GameObject _A = Instantiate(arrow, new Vector3(arrowPoint.position.x, arrowPoint.position.y, arrowPoint.position.z), arrowPoint.rotation * Quaternion.AngleAxis(Random.Range(-10.0f, 10.0f), Vector3.up + Vector3.right));
             Rigidbody arrowRB = _A.GetComponent<Rigidbody>();
 
             // チャージ量による処理

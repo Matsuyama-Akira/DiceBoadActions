@@ -40,7 +40,7 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
         if (this == Instance) { return true; }
 
         // シングルトンでなければ破棄する
-        Destroy(this);
+        Destroy(this.gameObject);
         return false;
     }
 }

@@ -3,66 +3,78 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class MoveChecker : MonoBehaviour
 {
+    /// <summary> マスのステータス </summary>
     public enum Status
     {
         Normal = 0, Items = 1, Heal = 2, Enemy1 = 3, Enemy2 = 4, Boss = 5,
     }
 
+    /// <summary> 宝箱のレアリティ </summary>
     public enum ItemLevel
     {
         Common = 0, Rare = 1, Unique = 2, Legend = 3,
     }
 
+    /// <summary> すごろくのマネージャー </summary>
     private DiceBoadManagement manager;
 
     [Header("Mat slot")]
-    [SerializeField] Material OKMat;
-    [SerializeField] Material NGMat;
+    [SerializeField, Tooltip("進めるマスの色")] Material OKMat;
+    [SerializeField, Tooltip("進めないマスの色")] Material NGMat;
 
     [Space, Header("Status of model")]
-    [SerializeField] GameObject HealthKit;
-    [SerializeField, NamedArray(new string[] { "Common", "Rare", "Unique", "Legend" })]
+    [SerializeField, Tooltip("救急キットのオブジェクト")] GameObject HealthKit;
+    [SerializeField, Tooltip("宝箱のレアリティ毎のオブジェクト"), NamedArray(new string[] { "Common", "Rare", "Unique", "Legend" })]
     GameObject[] ItemBox;
-    [SerializeField, NamedArray(new string[] { "Enemy1", "Enemy2", "Boss" })]
+    [SerializeField, Tooltip("敵のレベル毎のオブジェクト"), NamedArray(new string[] { "Enemy1", "Enemy2", "Boss" })]
     GameObject[] Enemys;
 
     //Instance
-    [SerializeField] GameObject _healthKit;
-    [SerializeField] GameObject _itemBox;
-    [SerializeField] GameObject _enemys;
-    [SerializeField] Animator animator;
+    [SerializeField, Tooltip("救急キットのインスタンス")] GameObject _healthKit;
+    [SerializeField, Tooltip("宝箱のインスタンス")] GameObject _itemBox;
+    [SerializeField, Tooltip("敵オブジェクトのインスタンス")] GameObject _enemys;
+    [SerializeField, Tooltip("宝箱と敵オブジェクトのインスタンスのアニメーター")] Animator animator;
+    /// <summary> アニメーターで再生しているアニメーションの名前 </summary>
     AnimatorClipInfo[] clipInfos;
+    /// <summary> アニメーションがnull </summary>
     bool isNullAnim;
 
     [Space, Header("Mass status")]
-    [SerializeField] bool moveCheck;
-    [SerializeField] int massNum1;
-    [SerializeField] int massNum2;
-    [SerializeField] Status status;
-    [SerializeField] Status lateStatus;
-    [SerializeField] private bool statusSwitch;
-    [SerializeField] ItemLevel item;
-    [SerializeField] private bool itemLevelSwitch;
+    [SerializeField, Tooltip("このマスに進めるか")] bool moveCheck;
+    [SerializeField, Tooltip("マスのX軸のナンバー")] int massNum1;
+    [SerializeField, Tooltip("マスのY軸のナンバー")] int massNum2;
+    [SerializeField, Tooltip("このマスの現在のステータス")] Status status;
+    [SerializeField, Tooltip("このマスの一つ前のステータス")] Status lateStatus;
+    [SerializeField, Tooltip("ステータスが変化したか")] private bool statusSwitch;
+    [SerializeField, Tooltip("宝箱のレアリティ")] ItemLevel item;
+    [SerializeField, Tooltip("レアリティが変化したか")] private bool itemLevelSwitch;
+    /// <summary> 一つ前のレアリティ </summary>
     private ItemLevel lateItem;
-    [SerializeField] bool clear;
-    [SerializeField] bool lateClear;
-    [SerializeField] bool cleared;
+    [SerializeField, Tooltip("クリアしたか")] bool clear;
+    [SerializeField, Tooltip("敵マスとしてクリアした時に処理を遅らせるための変数")] bool lateClear;
+    [SerializeField, Tooltip("過去にクリアしたか")] bool cleared;
+
     [Space, Header("Instance rotation")]
-    [SerializeField] Quaternion instanceRotation;
+    [SerializeField, Tooltip("生成するインスタンスに掛ける回転")] Quaternion instanceRotation;
     [Header("Items transform")]
+    /// <summary> 救急キットのインスタンス生成位置調整 </summary>
     private Vector3 healPosition = new Vector3(0, 1, 0);
-    [SerializeField] Quaternion healRotation;
+    [SerializeField, Tooltip("救急キットのインスタンス生成に掛ける回転")] Quaternion healRotation;
 
     private void Awake()
     {
+        // マネージャーの取得
         manager = GameObject.Find("DiceBoadManager").GetComponent<DiceBoadManagement>();
+
+        // マスのクリア情報を取得
         clear = false;
         cleared = manager.GetClearMass(massNum1, massNum2);
+        Clear();
     }
 
     private void Update()
     {
-        Clear();
+        // 
         if (moveCheck) gameObject.GetComponent<Renderer>().material = OKMat;
         else gameObject.GetComponent<Renderer>().material = NGMat;
         if(_enemys != null & _healthKit != null & _itemBox != null) SetInstance();
@@ -213,6 +225,13 @@ public class MoveChecker : MonoBehaviour
 
     void Clear()
     {
+        if (cleared)
+        {
+            ResetInstance();
+            clear = true;
+            status = Status.Normal;
+        }
+        /* 
         switch (status)
         {
             case Status.Items:
@@ -228,6 +247,7 @@ public class MoveChecker : MonoBehaviour
                 if (cleared) ResetInstance();
                 break;
         }
+        */
     }
 
     void ResetInstance()
