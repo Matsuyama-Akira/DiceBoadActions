@@ -74,21 +74,30 @@ public class MoveChecker : MonoBehaviour
 
     private void Update()
     {
-        // 
+        // 進行可能か否かでマテリアルを変更
         if (moveCheck) gameObject.GetComponent<Renderer>().material = OKMat;
         else gameObject.GetComponent<Renderer>().material = NGMat;
+
+        // 生成済のオブジェクトをインスタンスに挿入
         if(_enemys != null & _healthKit != null & _itemBox != null) SetInstance();
 
+        // エディター上で変更した時の処理
         if (!Application.isPlaying)
         {
+            // ステータスの切り替わりを検知
             statusSwitch = status != lateStatus;
             itemLevelSwitch = item != lateItem;
+            // 切り替わったステータスを取得して保存
             lateStatus = status;
             lateItem = item;
 
+            // ステータスが切り替わったら
             if (statusSwitch | itemLevelSwitch)
             {
+                // インスタンスを全てリセット
                 ResetInstance();
+
+                // その後ステータス毎にインスタンスを生成し、アニメーターを取得する
                 switch (status)
                 {
                     case Status.Normal:
@@ -121,22 +130,31 @@ public class MoveChecker : MonoBehaviour
                 }
             }
         }
-        Math();
+
+        // ランタイム上での処理
+        MainGamePlay();
     }
 
-    void Math()
+    void MainGamePlay()
     {
         if (Application.isPlaying)
         {
+            // ステータスが敵マスなら
             if ((status == Status.Enemy1 | status == Status.Enemy2 | status == Status.Boss) & _enemys != null)
             {
+                // バトル後ならばアニメーションをDieにする
                 if (lateClear)
                 {
                     animator.SetBool("IsDie", lateClear);
+
+                    // アニメーション名を取得
                     clipInfos = animator.GetCurrentAnimatorClipInfo(1);
+
+                    // アニメーションの再生が終了したら
                     isNullAnim = clipInfos.Length == 0;
                     if (isNullAnim)
                     {
+                        // マスをクリアにし、各種処理を起こしてインスタンスを破棄する
                         clear = true;
                         manager.SetEnemyDown(false);
                         manager.AddEventMass();
@@ -144,13 +162,21 @@ public class MoveChecker : MonoBehaviour
                     }
                 }
             }
+
+            // ステータスが宝箱マスなら
             if(status == Status.Items & _itemBox != null)
             {
+                // マスに止まったらアニメーションを再生
                 animator.SetBool("Open", clear);
+
+                // アニメーション名を取得
                 clipInfos = animator.GetCurrentAnimatorClipInfo(0);
+
+                // アニメーションの再生が終了したら
                 isNullAnim = clipInfos.Length == 0;
                 if (isNullAnim)
                 {
+                    // 武器の種類とレアリティをランダムに取得し、マネージャーに送ったらインスタンスを破棄
                     int randomWepon = Random.Range(0, 5), randomLevel = Random.Range(0, 3);
                     if (randomWepon == 1) randomWepon = 0;
                     if (randomWepon > 2) randomWepon = 2;
@@ -159,41 +185,30 @@ public class MoveChecker : MonoBehaviour
                     ResetInstance();
                 }
             }
+
+            // ステータスが回復マスなら
             if(status == Status.Heal & _healthKit != null)
             {
+                // クリアしたら
                 if(clear & lateClear)
                 {
+                    // インスタンスを破棄
                     manager.AddEventMass();
                     ResetInstance();
                 }
             }
         }
 
+        // このオブジェクトにインスタンスが存在しない場合、ステータスをNormalに変更
         if (!gameObject.HasChild())
         {
             status = Status.Normal;
         }
     }
 
-    void SetStatus()
-    {
-        foreach(Transform c in transform)
-        {
-            string tag = c.gameObject.tag.ToString();
-            switch (tag)
-            {
-                case "DB_Treasure": status = Status.Items; break;
-                case "DB_Health": status = Status.Heal; break;
-                case "DB_Enemy1": status = Status.Enemy1; break;
-                case "DB_Enemy2": status = Status.Enemy2; break;
-                case "DB_Enemy_Boss": status = Status.Boss; break;
-                default: status = Status.Normal; break;
-            }
-        }
-    }
-
     void SetInstance()
     {
+        // 子オブジェクトが存在するならば、対応したインスタンスを挿入する
         foreach (Transform c in transform)
         {
             switch (status)
@@ -225,6 +240,7 @@ public class MoveChecker : MonoBehaviour
 
     void Clear()
     {
+        // 一度クリアしていれば、インスタンスを破棄してステータスをNormalに
         if (cleared)
         {
             ResetInstance();
@@ -252,6 +268,7 @@ public class MoveChecker : MonoBehaviour
 
     void ResetInstance()
     {
+        // 子オブジェクトを破棄する
         foreach (Transform c in transform)
         {
             DestroyObject(c.gameObject);
@@ -286,6 +303,7 @@ public class MoveChecker : MonoBehaviour
 
 public static partial class GameObjectExtensions
 {
+    // このオブジェクトに子オブジェクトが存在するかを確認
     public static bool HasChild(this GameObject gameObject)
     {
         return 0 < gameObject.transform.childCount;

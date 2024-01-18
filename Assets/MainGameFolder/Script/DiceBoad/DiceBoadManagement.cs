@@ -250,6 +250,8 @@ public class DiceBoadManagement : MonoBehaviour
     {
         // 移動中
         isMoving = true;
+
+        // 移動可能ポイントが0ではないなら
         while (movePoint > 0)
         {
             PlayerMove();
@@ -260,71 +262,98 @@ public class DiceBoadManagement : MonoBehaviour
 
     void PlayerMove()
     {
+        // 移動方向の処理
         if (movePoint > 0 & moveOut)
         {
+            // 前進
             if (flont & moveChecks[0])
             {
+                // 移動処理
                 nextPosition = nextMass[0].position;
                 nextQuaternion = Quaternion.AngleAxis(0, Vector3.up);
                 player.localRotation *= nextQuaternion;
+
+                // SEを再生
                 int randomNum = Random.Range(0, seManager.DB_FootSE.Length);
                 if (seManager.DB_FootSE[randomNum] != null) seManager.DB_FootSESource.PlayOneShot(seManager.DB_FootSE[randomNum]);
+
+                // 移動可能ポイントを減少
                 movePoint--;
                 return;
             }
+
+            // 後進
             if (back & moveChecks[1])
             {
+                // 移動処理
                 nextPosition = nextMass[1].position;
                 nextQuaternion = Quaternion.AngleAxis(180, Vector3.up);
                 player.localRotation *= nextQuaternion;
+
+                // SEを再生
                 int randomNum = Random.Range(0, seManager.DB_FootSE.Length);
                 if (seManager.DB_FootSE[randomNum] != null) seManager.DB_FootSESource.PlayOneShot(seManager.DB_FootSE[randomNum]);
+
+                // 移動可能ポイントを減少
                 movePoint--;
                 return;
             }
+
+            // 右折
             if (right & moveChecks[2])
             {
+                // 移動処理
                 nextPosition = nextMass[2].position;
                 nextQuaternion = Quaternion.AngleAxis(90, Vector3.up);
                 player.localRotation *= nextQuaternion;
+
+                // SEを再生
                 int randomNum = Random.Range(0, seManager.DB_FootSE.Length);
                 if (seManager.DB_FootSE[randomNum] != null) seManager.DB_FootSESource.PlayOneShot(seManager.DB_FootSE[randomNum]);
+
+                // 移動可能ポイントを減少
                 movePoint--;
                 return;
             }
+
+            // 左折
             if (left & moveChecks[3])
             {
+                // 移動処理
                 nextPosition = nextMass[3].position;
                 nextQuaternion = Quaternion.AngleAxis(-90, Vector3.up);
                 player.localRotation *= nextQuaternion;
+
+                // SEを再生
                 int randomNum = Random.Range(0, seManager.DB_FootSE.Length);
                 if (seManager.DB_FootSE[randomNum] != null) seManager.DB_FootSESource.PlayOneShot(seManager.DB_FootSE[randomNum]);
+
+                // 移動可能ポイントを減少
                 movePoint--;
                 return;
             }
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     void MoveAnim()
     {
+        // 移動処理とアニメーションの再生
         moveOut = player.position == nextPosition;
         playerAnimator.SetBool("Moving", !moveOut);
         player.position = Vector3.MoveTowards(player.position, nextPosition, moveSpeed * Time.deltaTime);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     void Manager()
     {
+        // キー入力を取得
         KeyInput();
+
+        // プレイヤーのステータス処理
         playerTurn = !isMoving & !healing & !isWeponSellect & !itemBoxOpening & !enemyDown;
         player = _player.transform;
         isStandby = !isMoving & _dice == null;
 
+        // 矢印オブジェクトの表示
         int arrow = 0;
         while (arrow < 4)
         {
@@ -346,34 +375,16 @@ public class DiceBoadManagement : MonoBehaviour
         skill = Input.GetKeyDown(Controller.Skill);
     }
 
-    void Debugger()
+    void AddSerialBools()
     {
+        // クリアリストのセット
         int num1 = 0, num2;
         while (num1 < 11)
         {
             num2 = 0;
             while (num2 < 11)
             {
-                if (clearMass[num1, num2])
-                {
-                    Debug.LogWarning("(" + num1 + "," + num2 + ") = true");
-                }
-                num2++;
-            }
-            num1++;
-        }
-    }
-
-    void AddSerialBools()
-    {
-        int num1 = 0;
-        int num2;
-        while (num1 < 11)
-        {
-            num2 = 0;
-            while (num2 < 11)
-            {
-                clearList.GetBools(num1, num2, clearMass[num1, num2]);
+                clearList.SetBools(num1, num2, clearMass[num1, num2]);
                 num2++;
             }
             num1++;
@@ -382,8 +393,11 @@ public class DiceBoadManagement : MonoBehaviour
 
     void SceneChenge(string sceneName)
     {
+        // プレイヤーの現在の位置と回転を保存
         playerStatus.AddPosition(player.position);
         playerStatus.AddQuaternion(player.rotation);
+
+        // シーンを切り替える
         chengeScene.ChengeScene(sceneName);
     }
 
@@ -407,19 +421,21 @@ public class DiceBoadManagement : MonoBehaviour
 
     public void CurrentMass(int massStatus)
     {
+        // 現在いるマスのステータスを取得
         switch (massStatus)
         {
-            case 0: nowMass = CurrentMassStatus.Normal; break; //Normal
-            case 1: nowMass = CurrentMassStatus.Items; break; //Items
-            case 2: nowMass = CurrentMassStatus.Heal; break; //Heal
-            case 3: nowMass = CurrentMassStatus.Enemy1; break; //Enemy1
-            case 4: nowMass = CurrentMassStatus.Enemy2; break; //Enemy2
-            case 5: nowMass = CurrentMassStatus.Boss; break; //Boss
+            case 0: nowMass = CurrentMassStatus.Normal; break;
+            case 1: nowMass = CurrentMassStatus.Items; break;
+            case 2: nowMass = CurrentMassStatus.Heal; break;
+            case 3: nowMass = CurrentMassStatus.Enemy1; break;
+            case 4: nowMass = CurrentMassStatus.Enemy2; break;
+            case 5: nowMass = CurrentMassStatus.Boss; break;
         }
     }
 
     public void OnWeponSellectedBotton(bool chenge)
     {
+        // 武器を変更した場合、保存されていた新しい武器の種類とレアリティを挿入
         if (chenge)
         {
             switch (newWepons[0])
@@ -436,8 +452,11 @@ public class DiceBoadManagement : MonoBehaviour
                 case 1: wepon.rarelity = WeponSellect.Rarelity.Rare; break;
                 case 2: wepon.rarelity = WeponSellect.Rarelity.Unique; break;
             }
+            // HPが武器毎の最大HPをオーバーしないように処理を挟む
             playerStatus.AddHealHP(0);
         }
+
+        // 武器を変更するためのスイッチを解除する
         isWeponSellect = false;
         itemBoxOpening = false;
     }

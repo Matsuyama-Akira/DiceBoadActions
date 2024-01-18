@@ -17,7 +17,8 @@ public class DB_ClearList : MonoBehaviour
     [SerializeField, Header("Horizonal status")]
     private MultiArrayClass[] multiArrayClasses = new MultiArrayClass[11];
 
-    public void GetBools(int num1, int num2, bool status)
+    // 二次元配列でそれぞれにboolでステータスを保有する
+    public void SetBools(int num1, int num2, bool status)
     {
         multiArrayClasses[num1].multiArray[num2] = status;
     }
