@@ -6,11 +6,13 @@ using System;
 
 public class SettingChenger : MonoBehaviour
 {
+    /// <summary> 選択されたキー </summary>
     private enum KeySellect
     {
         Flont, Back, Right, Left, Jump, Crouch, Run, Attack, Skill, Unique, None,
     }
 
+    // 必須のスクリプトとオブジェクト
     private AllGameManagement gameManager;
     private AllGameSEManager seManager;
     private NextScene sceneChenger;
