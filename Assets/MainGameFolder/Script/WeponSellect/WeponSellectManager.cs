@@ -4,7 +4,10 @@ using TMPro;
 
 public class WeponSellectManager : MonoBehaviour
 {
+    // 必須スクリプト
     private WeponSellect wepon;
+
+    // UI周り
     [SerializeField] TextMeshProUGUI weponText;
     [SerializeField] Transform weponSpawnPoint;
     [SerializeField, NamedArray(new string[5] { "Sword", "Spear", "Bow", "Gun", "Magic" })]
@@ -18,7 +21,10 @@ public class WeponSellectManager : MonoBehaviour
 
     public void WeponSellecter(string SellectWepon)
     {
-        wepon.weponSellecting(SellectWepon);
+        // 武器種選択の適用
+        wepon.SetWepon(SellectWepon);
+
+        // UIで選択したものを表示
         weponText.text = SellectWepon;
         switch (SellectWepon)
         {

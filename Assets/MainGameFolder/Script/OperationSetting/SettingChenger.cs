@@ -21,12 +21,12 @@ public class SettingChenger : MonoBehaviour
     private Slider SensitivityYSlider;
     private Slider allSensitivitySlider;
 
-    //Sensi set
-    [SerializeField] private float setSensiX;
-    [SerializeField] private float setSensiY;
-    [SerializeField] private float setAllSensi;
+    // カメラ感度数値
+    [SerializeField, Tooltip("X軸の感度")] private float setSensiX;
+    [SerializeField, Tooltip("Y軸の感度")] private float setSensiY;
+    [SerializeField, Tooltip("全体の感度")] private float setAllSensi;
 
-    //Key set
+    // 一時的にキー設定を保存する変数
     private KeyCode setFlont;
     private KeyCode setBack;
     private KeyCode setRight;
@@ -40,12 +40,13 @@ public class SettingChenger : MonoBehaviour
     private KeyCode setSkill;
     private KeyCode setUnique;
 
-    //Selecting key
+    // 変更したいキーをセットする
     private KeySellect sellect = KeySellect.None;
     private bool resetter;
 
     private void Awake()
     {
+        // マネージャーとUIのセットアップ
         GameObject manager = GameObject.FindWithTag("GameManager");
         gameManager  = manager.GetComponent<AllGameManagement>();
         seManager = manager.GetComponent<AllGameSEManager>();
@@ -54,12 +55,15 @@ public class SettingChenger : MonoBehaviour
         allSensitivitySlider = GameObject.Find("AllSensitivity").GetComponent<Slider>();
         SensitivityXSlider = GameObject.Find("Sensitivity_X").GetComponent<Slider>();
         SensitivityYSlider = GameObject.Find("Sensitivity_Y").GetComponent<Slider>();
+
+        // 変更したいキーの初期化
         sellect = KeySellect.None;
         SettingLoader();
     }
-    /// <summary> setting load </summary>
+
     void SettingLoader()
     {
+        // キー設定とカメラ感度設定を取得
         setFlont    = Controller.Flont;
         setBack     = Controller.Back;
         setRight    = Controller.Right;
@@ -86,6 +90,7 @@ public class SettingChenger : MonoBehaviour
 
     void SetSensitivity()
     {
+        // カメラ感度設定が変更されたら数値を取得して適用
         if(setSensiX != SensitivityXSlider.value | setSensiY != SensitivityYSlider.value | setAllSensi != allSensitivitySlider.value)
         {
             setSensiX = SensitivityXSlider.value;
@@ -98,6 +103,7 @@ public class SettingChenger : MonoBehaviour
     /// <summary>  </summary>
     void DownKeyCheck()
     {
+        // 変更したいキーが選択されたらUIを表示し、キー入力を取得
         if (sellect != KeySellect.None)
         {
             inputKeyCheckUI.SetActive(true);
@@ -107,6 +113,7 @@ public class SettingChenger : MonoBehaviour
                 {
                     if (Input.GetKeyDown(code))
                     {
+                        // 変更したいキーを選択する際に左クリックを要求するので、連続して判定を行わないようにする
                         if (code == KeyCode.Mouse0 & !resetter) { resetter = true; break; }
                         KeyChenge(code);
                         resetter = false;
@@ -117,8 +124,8 @@ public class SettingChenger : MonoBehaviour
         else inputKeyCheckUI.SetActive(false);
     }
 
-    /// <summary>  </summary>
-    /// <param name="keyName"></param>
+    /// <summary> ボタンをクリックして対応したキーを取得する </summary>
+    /// <param name="keyName">対応したキーの名前</param>
     public void StartKeyChenge(string keyName)
     {
         switch (keyName)
@@ -135,7 +142,7 @@ public class SettingChenger : MonoBehaviour
             case "Unique": sellect = KeySellect.Unique; break;
         }
     }
-    /// <summary>  </summary>
+    /// <summary> 入力されたキーを保存し適用する </summary>
     void KeyChenge(KeyCode code)
     {
         switch (sellect)
@@ -150,14 +157,14 @@ public class SettingChenger : MonoBehaviour
             case KeySellect.Attack: setAttack = code; break;
             case KeySellect.Skill:  setSkill  = code; break;
             case KeySellect.Unique: setUnique = code; break;
-            case KeySellect.None:                     break;
+            default:                                  break;
         }
         sellect = KeySellect.None;
         seManager.ButtonSESource.PlayOneShot(seManager.OperationSettingButtonSE[1]);
         SettingSetter();
     }
 
-    /// <summary>  </summary>
+    /// <summary> 設定画面になる前のシーンに戻す </summary>
     public void GoPreviousScene()
     {
         SettingSetter();
@@ -180,7 +187,7 @@ public class SettingChenger : MonoBehaviour
         sceneChenger.ChengeScene(goScene);
     }
 
-    /// <summary>  </summary>
+    /// <summary> 一時的に保存した設定を適用する </summary>
     void SettingSetter()
     {
         Controller.Flont    = setFlont;

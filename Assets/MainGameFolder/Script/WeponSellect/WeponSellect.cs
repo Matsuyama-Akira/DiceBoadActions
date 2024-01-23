@@ -4,6 +4,7 @@ namespace AllGameManager
 {
     public class WeponSellect : MonoBehaviour
     {
+        /// <summary> 武器の種類 </summary>
         public enum Wepon
         {
             Sword   = 0,
@@ -12,6 +13,7 @@ namespace AllGameManager
             Gun     = 3,
             Magic   = 4,
         }
+        /// <summary> 武器のレアリティ </summary>
         public enum Rarelity
         {
             Common  = 0,
@@ -19,10 +21,15 @@ namespace AllGameManager
             Unique  = 2,
         }
 
+        /// <summary> 現在の武器の種類 </summary>
         public Wepon wepon;
+        /// <summary> 現在の武器のレアリティ </summary>
         public Rarelity rarelity;
 
-        public void weponSellecting(string weponSellect)
+        /// <summary>
+        /// 武器選択
+        /// </summary>
+        public void SetWepon(string weponSellect)
         {
             switch (weponSellect)
             {
@@ -33,6 +40,9 @@ namespace AllGameManager
                 case "MagicWepon":  wepon = Wepon.Magic; break;
             }
         }
+        /// <summary>
+        /// レアリティのセット
+        /// </summary>
         public void SetRarelity(int level)
         {
             switch (level)
