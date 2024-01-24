@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace AllGameManager
@@ -33,6 +33,9 @@ namespace AllGameManager
         /// <summary> BGMデータ </summary>
         private AllGameBGM BGMPleyer;
 
+        /// <summary> FPSの最大値 </summary>
+        [SerializeField] private int MaxFrameRate;
+
         void Awake()
         {
             // このオブジェクトを全てのシーンで引き継ぐ
@@ -44,7 +47,7 @@ namespace AllGameManager
         private void Start()
         {
             // フレームレートを最大30に固定
-            Application.targetFrameRate = 30;
+            Application.targetFrameRate = MaxFrameRate;
         }
 
         void Update()

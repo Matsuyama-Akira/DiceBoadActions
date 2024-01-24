@@ -503,7 +503,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e38f52d715e04cacb8f42828ad308b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scene: 0
   loadUI: {fileID: 362318886}
   slider: {fileID: 362318884}
 --- !u!4 &227977403
@@ -2380,6 +2379,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5026640742419802088, guid: d490c750e0a5a59478edc1204f7768c4, type: 3}
+      propertyPath: MaxFrameRate
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 5026640742419802090, guid: d490c750e0a5a59478edc1204f7768c4, type: 3}
       propertyPath: m_Name
       value: AllGameManager
@@ -2562,7 +2565,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {fileID: 663879499}
-  allSensiValue: {fileID: 592715443}
+  SensitivityValue: {fileID: 592715443}
   playInput: 0
 --- !u!114 &663879501
 MonoBehaviour:
@@ -5123,7 +5126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {fileID: 1196554865}
-  allSensiValue: {fileID: 412941492}
+  SensitivityValue: {fileID: 412941492}
   playInput: 0
 --- !u!114 &1196554867
 MonoBehaviour:
@@ -6185,7 +6188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {fileID: 1584713772}
-  allSensiValue: {fileID: 1133884143}
+  SensitivityValue: {fileID: 1133884143}
   playInput: 0
 --- !u!114 &1584713774
 MonoBehaviour:
