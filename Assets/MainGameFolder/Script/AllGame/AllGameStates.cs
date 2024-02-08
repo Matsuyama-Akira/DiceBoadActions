@@ -17,13 +17,13 @@ namespace AllGameManager
 
         // リザルト用の数値
         /// <summary> 倒した敵の数 </summary>
-        private int enemyKillCount;
+        [SerializeField] private int enemyKillCount;
         /// <summary> 与えたダメージの総数 </summary>
-        private int AllDamage;
+        [SerializeField] private int AllDamage;
         /// <summary> すごろくでサイコロを振った数 </summary>
-        private int playTurn;
+        [SerializeField] private int playTurn;
         /// <summary> すごろくでイベントマスに止まった数 </summary>
-        private int eventMass;
+        [SerializeField] private int eventMass;
 
         // すごろく用のステータス
         /// <summary> ゲームをスタートしたか </summary>
@@ -51,6 +51,7 @@ namespace AllGameManager
             enemyKillCount = 0;
             playTurn = 0;
             eventMass = 0;
+            AllDamage = 0;
         }
 
         // 各データの挿入
